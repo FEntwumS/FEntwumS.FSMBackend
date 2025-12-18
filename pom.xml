@@ -23,6 +23,7 @@
         <!-- Dependencies Properties -->
         <dependency.version.junit>4.13.2</dependency.version.junit>
         <dependency.version.lombok>1.18.42</dependency.version.lombok>
+        <dependency.version.picocli>4.7.7</dependency.version.picocli>
     </properties>
 
     <dependencyManagement>
@@ -31,6 +32,11 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${dependency.version.lombok}</version>
+            </dependency>
+            <dependency>
+                <groupId>info.picocli</groupId>
+                <artifactId>picocli</artifactId>
+                <version>${dependency.version.picocli}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

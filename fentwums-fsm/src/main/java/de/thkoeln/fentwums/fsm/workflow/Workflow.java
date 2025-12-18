@@ -649,7 +649,7 @@ public class Workflow implements I_WORKFLOW
     /**
      * exports the Project as C-Code
      *
-     * @param file a C file
+     * @param file_h a C file
      *
      * @author Jan Montag
      */

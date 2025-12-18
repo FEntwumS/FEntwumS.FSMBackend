@@ -824,24 +824,6 @@ public class GuiMain extends JFrame
         NewFileDialog newFileDialogTmp = new NewFileDialog(this,this);
     }
 
-    public static void main(String[] args)
-    {
-        boolean macOSX = false;
-        String osname = System.getProperty("os.name");
-
-        if(osname.contains("Mac")) {
-            macOSX = true;
-            System.setProperty("apple.laf.useScreenMenuBar", "true");
-            System.setProperty("apple.awt.brushMetalLook", "true");
-            System.setProperty("apple.awt.fileDialogForDirectories", "true");
-        }
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) { System.out.println("error: setLookAndFeel(..) failed"); }
-
-        GuiMain main = new GuiMain(1000, 650, macOSX);
-    }
-
 
     /**
     * opens a confirmation dialog

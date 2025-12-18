@@ -118,3 +118,5 @@ fabric.properties
 # Log files
 *.log
 *.log.zip
+
+dependency-reduced-pom.xml
