@@ -11,15 +11,17 @@ package de.thkoeln.fentwums.fsm.gui;
 
 import de.thkoeln.fentwums.fsm.graph.Graph.GRAPH_TYPE;
 import de.thkoeln.fentwums.fsm.gui.boundary.GuiPreferencesBoundary;
+import de.thkoeln.fentwums.fsm.util.I18n;
 import de.thkoeln.fentwums.fsm.util.ResourceLoader;
 import de.thkoeln.fentwums.fsm.workflow.Workflow;
+import lombok.Getter;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -50,10 +52,10 @@ public class GuiMain extends JFrame
     // *** ATTRIBUTES ***
 
     // associations
+    @Getter
     protected Workflow workflow;
-    private Mouse mouse;
-    private Listener listener;
-    private Keyboard keyboard;
+    @Getter
+    private final Listener listener;
     protected GraphicsPanel graphicsPanel = new GraphicsPanel();
 
     protected JTabbedPane leftTableTabber;
@@ -70,9 +72,9 @@ public class GuiMain extends JFrame
     // GUI-elements
     protected JScrollPane graphicsPanelScrollPane;
 
-    private JPanel tools, toolbar, sidebar, mainWindow, topPanel,
-            hzLine, leftPanel, logPanel, buildPanel;
-    
+    private final JPanel tools;
+    private final JPanel toolbar;
+
     protected JPanel clearLogPanel;
 
     protected JTextArea log;
@@ -80,8 +82,6 @@ public class GuiMain extends JFrame
     private JMenuBar menuBar;
     
     private GuiAbout guiAbout;
-
-    private Border grayLine;
 
     protected JButton bNewFile, bOpenFile, bSaveFile, bUndo, bRedo, bDelete,
             bInsertState, bInsertStartNode, bInsertTransition, 
@@ -200,12 +200,12 @@ public class GuiMain extends JFrame
         guiAbout = new GuiAbout(this, ResourceLoader.loadImageIcon("about"));
 
         // mouse listener
-        this.mouse = new Mouse(this);
+        Mouse mouse = new Mouse(this);
         addMouseListener(mouse);
         addMouseMotionListener(mouse);
 
         // keyboard listener
-        this.keyboard = new Keyboard(this);
+        Keyboard keyboard = new Keyboard(this);
         KeyboardFocusManager.getCurrentKeyboardFocusManager().
                 addKeyEventDispatcher(keyboard);
 
@@ -249,7 +249,7 @@ public class GuiMain extends JFrame
 
         // ****** TOP-PANEL *******
 
-        topPanel = new JPanel();
+        JPanel topPanel = new JPanel();
 
         topPanel.setLayout(new BorderLayout());
 
@@ -260,55 +260,27 @@ public class GuiMain extends JFrame
         menuBar.setBackground(new Color(0xb4, 0xb4, 0xb4));
 
         // MenuBar elements
-        JMenu file = new JMenu("Datei");
-        JMenu help = new JMenu("Hilfe");
+        JMenu file = new JMenu(I18n.getString("menu.file"));
+        JMenu help = new JMenu(I18n.getString("menu.help"));
 
         file.setBackground(new Color(0xb4, 0xb4, 0xb4));
         help.setBackground(new Color(0xb4, 0xb4, 0xb4));
 
         // File
-        JMenuItem create = new JMenuItem("Neu...");
+        JMenuItem create = new JMenuItem(I18n.getString("menu.file.new"));
         final GuiMain gm = this;
-        create.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                listener.newFile();
-            }
-        });
+        create.addActionListener(e -> listener.newFile());
 
-        JMenuItem open = new JMenuItem("Öffnen...");
-        open.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                listener.openFile();
-            }
-        });
+        JMenuItem open = new JMenuItem(I18n.getString("menu.file.open"));
+        open.addActionListener(e -> listener.openFile());
 
-        JMenuItem save = new JMenuItem("Speichern");
-        save.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                listener.saveFile();
-            }
-        });
-        
-        JMenuItem saveAS = new JMenuItem("Speichern unter...");
-        saveAS.addActionListener(new ActionListener()
-        {
-            @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                listener.saveFileAs();
-            }
-        });
-        
-        JMenuItem export = new JMenuItem("Als Bild Exportieren...");
+        JMenuItem save = new JMenuItem(I18n.getString("menu.file.save"));
+        save.addActionListener(e -> listener.saveFile());
+
+        JMenuItem saveAS = new JMenuItem(I18n.getString("menu.file.saveAs"));
+        saveAS.addActionListener(e -> listener.saveFileAs());
+
+        JMenuItem export = new JMenuItem(I18n.getString("menu.file.exportImage"));
         export.addActionListener(new ActionListener()
         {
             @Override
@@ -318,13 +290,13 @@ public class GuiMain extends JFrame
             }
         });
 
-        JMenuItem exit = new JMenuItem("Beenden");
+        JMenuItem exit = new JMenuItem(I18n.getString("menu.file.exit"));
         exit.addActionListener(new ActionListener()
         {
             @Override
             public void actionPerformed(ActionEvent e)
             {
-                int i = confirmationDialog("Möchten Sie die Änderungen vor dem Beenden des STDE speichern?");
+                int i = confirmationDialog(I18n.getString("dialog.exit.saveConfirmation"));
                 if(i == 0)
                 {
                     listener.saveFileAs();
@@ -338,7 +310,7 @@ public class GuiMain extends JFrame
         });
 
         // Help
-        JMenuItem about = new JMenuItem("Über STDE...");
+        JMenuItem about = new JMenuItem(I18n.getString("menu.help.about"));
         about.addActionListener(new ActionListener()
         {
             @Override
@@ -374,50 +346,52 @@ public class GuiMain extends JFrame
         toolbar.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
 
         toolbar.add(Box.createHorizontalStrut(1));
-        bNewFile = addButton("bNewFile", "bNewFile_rollover", "bNewFile_pressed", "Neues Projekt anlegen");
-        bOpenFile = addButton("bOpenFile", "bOpenFile_rollover", "bOpenFile_pressed", "Projekt öffnen");
-        bSaveFile = addButton("bSaveFile", "bSaveFile_rollover", "bSaveFile_pressed", "Projekt speichern");
+        bNewFile = addButton("bNewFile", "bNewFile_rollover", "bNewFile_pressed", I18n.getString("toolbar.new"));
+        bOpenFile = addButton("bOpenFile", "bOpenFile_rollover", "bOpenFile_pressed", I18n.getString("toolbar.open"));
+        bSaveFile = addButton("bSaveFile", "bSaveFile_rollover", "bSaveFile_pressed", I18n.getString("toolbar.save"));
         toolbar.add(Box.createHorizontalStrut(10));
         JSeparator sep = new JSeparator(JSeparator.VERTICAL);
         sep.setMaximumSize(new Dimension(2,26));
         toolbar.add(sep);
         toolbar.add(Box.createHorizontalStrut(10));
 
-        bExportImage = addButton("bExportAsImage", "bExportAsImage_rollover", "bExportAsImage_pressed", "Als Bild exportieren");
+        bExportImage = addButton("bExportAsImage", "bExportAsImage_rollover", "bExportAsImage_pressed", I18n.getString("toolbar.exportImage"));
         
         toolbar.add(Box.createHorizontalStrut(10));
         sep = new JSeparator(JSeparator.VERTICAL);
         sep.setMaximumSize(new Dimension(2,26));
-        /*toolbar.add(sep);
+        /*
+        toolbar.add(sep);
         toolbar.add(Box.createHorizontalStrut(15));        
         bRedo = addButton("/Resources/bUndo.png", "/Resources/bUndo_rollover.png", "/Resources/bUndo_pressed.png", "Rückgänig");
         bUndo = addButton("/Resources/bRedo.png", "/Resources/bRedo_rollover.png", "/Resources/bRedo_pressed.png", "Wiederherstellen");
         toolbar.add(Box.createHorizontalStrut(10));
         sep = new JSeparator(JSeparator.VERTICAL);
-        sep.setMaximumSize(new Dimension(2,26));*/
+        sep.setMaximumSize(new Dimension(2,26));
+        */
         toolbar.add(sep);
         toolbar.add(Box.createHorizontalStrut(15));
-        btSelect = addToggleButton(false, "bSelect", "bSelect_pressed", "bSelect_rollover", "Auswahlmodus");
-        btInsert = addToggleButton(true, "bInsert", "bInsert_pressed", "bInsert_rollover", "Einfügemodus");
+        btSelect = addToggleButton(false, "bSelect", "bSelect_pressed", "bSelect_rollover", I18n.getString("toolbar.mode.select"));
+        btInsert = addToggleButton(true, "bInsert", "bInsert_pressed", "bInsert_rollover", I18n.getString("toolbar.mode.insert"));
         toolbar.add(Box.createHorizontalStrut(15));
         sep = new JSeparator(JSeparator.VERTICAL);
         sep.setMaximumSize(new Dimension(2,26));
         toolbar.add(sep);
         toolbar.add(Box.createHorizontalStrut(10));
-        bDelete = addButton("bDelete", "bDelete_rollover", "bDelete_pressed", "Löschen");
+        bDelete = addButton("bDelete", "bDelete_rollover", "bDelete_pressed", I18n.getString("toolbar.delete"));
         toolbar.add(Box.createHorizontalStrut(10));
         sep = new JSeparator(JSeparator.VERTICAL);
         sep.setMaximumSize(new Dimension(2,26));
         toolbar.add(sep);
         toolbar.add(Box.createHorizontalStrut(15));
-        bSelectAll = addButton("bSelectAll", "bSelectAll_rollover", "bSelectAll_pressed", "Alle Komponenten selektieren");
-        btGrid = addToggleButton(true, "bGrid", "bGrid_pressed", "bGrid_rollover", "Grid ein/aus");
+        bSelectAll = addButton("bSelectAll", "bSelectAll_rollover", "bSelectAll_pressed", I18n.getString("toolbar.selectAll"));
+        btGrid = addToggleButton(true, "bGrid", "bGrid_pressed", "bGrid_rollover", I18n.getString("toolbar.grid"));
         toolbar.add(Box.createHorizontalStrut(10));
         sep = new JSeparator(JSeparator.VERTICAL);
         sep.setMaximumSize(new Dimension(2,26));
         toolbar.add(sep);
         toolbar.add(Box.createHorizontalStrut(15));
-        bPreferences = addButton("bPreferences", "bPreferences_rollover", "bPreferences_pressed", "Einstellungen");
+        bPreferences = addButton("bPreferences", "bPreferences_rollover", "bPreferences_pressed", I18n.getString("toolbar.preferences"));
         toolbar.add(Box.createHorizontalStrut(10));
 
         sep = new JSeparator(JSeparator.VERTICAL);
@@ -427,15 +401,16 @@ public class GuiMain extends JFrame
         bIncTransCtrlPoints = addButton("bIncCtrlPoints",
                 "bIncCtrlPoints_rollover",
                 "bIncCtrlPoints_pressed",
-                "Füge Controlpoint zur selektieren Transition hinzu");
+                I18n.getString("toolbar.transition.addPoint"));
+
         bDecTransCtrlPoints = addButton("bDecCtrlPoints",
                 "bDecCtrlPoints_rollover",
                 "bDecCtrlPoints_pressed",
-                "Entferne Controlpoint aus selektierter Transition");
+                I18n.getString("toolbar.transition.removePoint"));
         
         
         // ****** HORIZONTAL_LINE *******
-        hzLine = new JPanel();
+        JPanel hzLine = new JPanel();
 
         hzLine.setLayout(new BoxLayout(hzLine, BoxLayout.Y_AXIS));
         hzLine.setBackground(new Color(0xe3, 0xe3, 0xe3));
@@ -447,7 +422,7 @@ public class GuiMain extends JFrame
         topPanel.add(hzLine, BorderLayout.SOUTH);
 
         // ****** SIDEBAR *******
-        sidebar = new JPanel();
+        JPanel sidebar = new JPanel();
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
         
         sidebar.setBackground(new Color(0xe3, 0xe3, 0xe3));
@@ -511,24 +486,24 @@ public class GuiMain extends JFrame
         tools.add(Box.createVerticalStrut(8));
         Box box = Box.createHorizontalBox();
 
-        bInsertStartNode = addTool(box, "bInsertMooreStartNode", "Startknoten einfügen");
-        bInsertTransition = addTool(box, "bInsertMooreTransition", "Übergang nach Moore einfügen");
+        bInsertStartNode = addTool(box, "bInsertMooreStartNode", I18n.getString("toolbar.insert.startNode"));
+        bInsertTransition = addTool(box, "bInsertMooreTransition", I18n.getString("toolbar.insert.mooreTransition"));
         tools.add(box);
-        bInsertState = addTool(box, "bInsertMooreState", "Zustand nach Moore einfügen");
+        bInsertState = addTool(box, "bInsertMooreState", I18n.getString("toolbar.insert.mooreState"));
 
         tools.add(box);
 
         tools.add(Box.createVerticalStrut(10));
 
-        grayLine = BorderFactory.createLineBorder(new Color(0x88, 0x8b, 0x94));
+        Border grayLine = BorderFactory.createLineBorder(new Color(0x88, 0x8b, 0x94));
         tools.setBorder(grayLine);
 
         sidebar.add(tools);
 
         // ****** BUILD *******
         sidebar.add(Box.createVerticalStrut(4));
-        
-        buildPanel = new JPanel();
+
+        JPanel buildPanel = new JPanel();
         buildPanel.setLayout(new BoxLayout(buildPanel, BoxLayout.Y_AXIS));
         
         panel = new JPanel()
@@ -593,11 +568,11 @@ public class GuiMain extends JFrame
         box = Box.createHorizontalBox();
         box.setBorder(BorderFactory.createEmptyBorder());
 
-        bVerify = addTool(box, "verify", "Verifizierung");
-        bIntegrDeterm = addTool(box, "check_integr_determ", "Determinismus und Vollständigkeit prüfen");
-        bSCXML = addTool(box, "scxml", "Export als SCXML");
-        bGenerateC = addTool(box, "generate_C", "Genierierung von C-Code");
-        bGenerateVHDL = addTool(box, "generate_VHDL", "Generierung von VHDL-Code");
+        bVerify = addTool(box, "verify", I18n.getString("toolbar.tool.verify"));
+        bIntegrDeterm = addTool(box, "check_integr_determ", I18n.getString("toolbar.tool.checkIntegrity"));
+        bSCXML = addTool(box, "scxml", I18n.getString("toolbar.tool.exportSCXML"));
+        bGenerateC = addTool(box, "generate_C", I18n.getString("toolbar.tool.generateC"));
+        bGenerateVHDL = addTool(box, "generate_VHDL", I18n.getString("toolbar.tool.generateVHDL"));
         
         buildPanel.add(Box.createVerticalStrut(8));
         buildPanel.add(box);
@@ -609,7 +584,7 @@ public class GuiMain extends JFrame
         sidebar.add(buildPanel);
 
         // ****** LOG *******
-        logPanel = new JPanel();
+        JPanel logPanel = new JPanel();
         logPanel.setLayout(new BoxLayout(logPanel, BoxLayout.Y_AXIS));
 
         panel = new JPanel()
@@ -644,7 +619,7 @@ public class GuiMain extends JFrame
                 g2d.fillRect(0,getSize().height/2,getSize().width,getSize().height);
 
                 g2d.setColor(Color.white);
-                g2d.drawLine(0, 0+1, getSize().width, 0+1); //vertical
+                g2d.drawLine(0, 1, getSize().width, 1); //vertical
                 g2d.drawLine(getSize().width-1-1, 0, getSize().width-1-1, getSize().height);
                 g2d.drawLine(1, 1, 1, getSize().height);
 
@@ -748,7 +723,7 @@ public class GuiMain extends JFrame
         sidebar.add(logPanel);
 
         // ****** LEFT-PANEL *******
-        leftPanel = new JPanel();
+        JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.X_AXIS));
         leftPanel.setBackground(new Color(0xe3, 0xe3, 0xe3));
         leftPanel.add(Box.createHorizontalStrut(2));
@@ -756,7 +731,7 @@ public class GuiMain extends JFrame
         leftPanel.add(sidebar);
 
         // ****** MAIN-WINDOW *******
-        mainWindow = new JPanel();
+        JPanel mainWindow = new JPanel();
         BorderLayout mainWindowBorderLayout = new BorderLayout();
         mainWindow.setLayout(mainWindowBorderLayout);
         // tables
@@ -765,13 +740,13 @@ public class GuiMain extends JFrame
         tablePanel.setBackground(new Color(0xe3, 0xe3, 0xe3));
         tablePanel.setBorder(new EmptyBorder(0,0,0,0));
 
-        leftTableTabber.add("Signale", guiTableSignals1);
-        leftTableTabber.add("Variablen", guiTableVariables1);
-        leftTableTabber.add("Zustände", guiTableStates1);
-        
-        rightTableTabber.add("Signale", guiTableSignals2);
-        rightTableTabber.add("Variablen", guiTableVariables2);
-        rightTableTabber.add("Zustände", guiTableStates2);
+        leftTableTabber.add(I18n.getString("tab.signals"), guiTableSignals1);
+        leftTableTabber.add(I18n.getString("tab.variables"), guiTableVariables1);
+        leftTableTabber.add(I18n.getString("tab.states"), guiTableStates1);
+
+        rightTableTabber.add(I18n.getString("tab.signals"), guiTableSignals2);
+        rightTableTabber.add(I18n.getString("tab.variables"), guiTableVariables2);
+        rightTableTabber.add(I18n.getString("tab.states"), guiTableStates2);
 
         //default
         rightTableTabber.setSelectedIndex(1);
@@ -838,7 +813,7 @@ public class GuiMain extends JFrame
 
         // Splitpane (LeftPanel <=> MainWindow)
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-                           leftPanel, mainWindow);
+                leftPanel, mainWindow);
         splitPane.setResizeWeight(0.2);
         splitPane.setBorder(new EmptyBorder(0,0,0,0));
         splitPane.setDividerSize(3);
@@ -867,16 +842,6 @@ public class GuiMain extends JFrame
         GuiMain main = new GuiMain(1000, 650, macOSX);
     }
 
-    /**
-    * returns the workflow
-    *
-    * @return the workflow
-    *
-    * @author Jan Montag
-    */
-    public Workflow getWorkflow() {
-        return workflow;
-    }
 
     /**
     * opens a confirmation dialog
@@ -888,10 +853,14 @@ public class GuiMain extends JFrame
     * @author Jan Montag
     */
     public int confirmationDialog(String question) {
-            Object[] options = {"Ja", "Nein", "Abbrechen"};
+        Object[] options = {
+                I18n.getString("dialog.button.yes"),
+                I18n.getString("dialog.button.no"),
+                I18n.getString("dialog.button.cancel")
+        };
             int response = JOptionPane.showOptionDialog(this,
                     question,
-                    "State Diagram Transition Editor", JOptionPane.YES_NO_CANCEL_OPTION,
+                    I18n.getString("dialog.title.confirm"), JOptionPane.YES_NO_CANCEL_OPTION,
                     JOptionPane.QUESTION_MESSAGE, null, options, options[2]);
             switch (response)
             {
@@ -903,7 +872,7 @@ public class GuiMain extends JFrame
                 case 2, -1:
                     return -1;
                 default:
-                    JOptionPane.showMessageDialog(null, "Unexpected response " + response);
+                    JOptionPane.showMessageDialog(null, I18n.getString("dialog.error.unexpected") + " " + response);
             }
             return -1;
     }
@@ -918,21 +887,25 @@ public class GuiMain extends JFrame
         if(workflow.getGraph().getGraphType() == GRAPH_TYPE.MOORE)
         {
             bInsertStartNode.setIcon(ResourceLoader.loadImageIcon("bInsertMooreStartNode"));
-            bInsertTransition.setToolTipText("Startknoten einfügen");
+            bInsertStartNode.setToolTipText(I18n.getString("toolbar.insert.startNode"));
+
             bInsertTransition.setIcon(ResourceLoader.loadImageIcon("bInsertMooreTransition"));
-            bInsertTransition.setToolTipText("Übergang nach Moore einfügen");
+            bInsertTransition.setToolTipText(I18n.getString("toolbar.insert.mooreTransition"));
+
             bInsertState.setIcon(ResourceLoader.loadImageIcon("bInsertMooreState"));
-            bInsertState.setToolTipText("Zustand nach Moore einfügen");
+            bInsertState.setToolTipText(I18n.getString("toolbar.insert.mooreState"));
         }
 
         if(workflow.getGraph().getGraphType() == GRAPH_TYPE.MEALY)
         {
             bInsertStartNode.setIcon(ResourceLoader.loadImageIcon("bInsertMealyStartNode"));
-            bInsertTransition.setToolTipText("Startknoten einfügen");
+            bInsertStartNode.setToolTipText(I18n.getString("toolbar.insert.startNode"));
+
             bInsertTransition.setIcon(ResourceLoader.loadImageIcon("bInsertMealyTransition"));
-            bInsertTransition.setToolTipText("Übergang nach Mealy einfügen");
+            bInsertTransition.setToolTipText(I18n.getString("toolbar.insert.mealyTransition"));
+
             bInsertState.setIcon(ResourceLoader.loadImageIcon("bInsertMealyState"));
-            bInsertState.setToolTipText("Zustand nach Mealy einfügen");
+            bInsertState.setToolTipText(I18n.getString("toolbar.insert.mealyState"));
         }
 
         tools.repaint();
@@ -949,16 +922,6 @@ public class GuiMain extends JFrame
         graphicsPanelScrollPane.getViewport().setViewPosition(new Point(0, 0));
     }
 
-    /**
-    * returns the Listener
-    *
-    * @return the Listener
-    *
-    * @author Jan Montag
-    */
-    public Listener getListener() {
-        return listener;
-    }
 
     /**
     * change the title of the project

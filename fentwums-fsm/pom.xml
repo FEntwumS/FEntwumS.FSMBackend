@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fentwums.th-koeln.de</groupId>
 		<artifactId>fentwums-fsm-parent</artifactId>
-		<version>0.11.6</version>
+		<version>0.1.0</version>
 	</parent>
 
 	<artifactId>fentwums-fsm</artifactId>
@@ -29,12 +29,29 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.42</version>
 		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>de.thkoeln.fentwums.fsm.gui.GuiMain</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 
 </project>
