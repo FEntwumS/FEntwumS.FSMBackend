@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>fentwums.th-koeln.de</groupId>
+    <artifactId>fentwums-fsm-parent</artifactId>
+    <version>0.11.6</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>fentwums-fsm</module>
+    </modules>
+
+    <properties>
+        <!-- Definieren von Properties -->
+        <java.version>21</java.version>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+
+        <!-- Dependencies Properties -->
+        <dependency.version.eclipse.elk>0.11.0</dependency.version.eclipse.elk>
+        <dependency.version.fasterxml.jackson>2.20.1</dependency.version.fasterxml.jackson>
+        <dependency.version.spring.spring-boot>3.5.7</dependency.version.spring.spring-boot>
+        <dependency.version.ch.qos.logback>1.5.21</dependency.version.ch.qos.logback>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version> <!-- Oder eine aktuelle Version -->
+                <configuration>
+                    <source>${java.version}</source> <!-- Oder 11, 17 etc., je nach Bedarf -->
+                    <target>${java.version}</target> <!-- Oder 11, 17 etc., je nach Bedarf -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
