@@ -28,8 +28,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
           cache-dependency-path: |
-            fentwums-netlist-reader-server/pom.xml
-            fentwums-netlist-reader-service/pom.xml
+            fentwums-fsm/pom.xml
       - name: Build with Maven
         run: mvn clean install
       - name: Create staging directory
