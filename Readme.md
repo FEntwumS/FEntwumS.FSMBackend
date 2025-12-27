@@ -9,10 +9,14 @@ This is all part of the OneWare Studio integration of this project.
 
 ## STDE - State Transition Diagram Editor
 The STDE was developed by Andreas Schwenk and Jan Montag under the supervision of Prof. Dr. Georg Hartung.
+The original software can be found in the author's [repository](https://github.com/andreas-schwenk/stde-classic).
 The original functions are still available via a Java Swing UI and can still be used.
+
 ![img.png](docs/images/stde_de.png)
+
 In this GUI, a Moore or Mealy automaton can be created. 
 This is checked for logical consistency and can then be exported as VHDL or C code as well as in XML format.
+
 ![img.png](docs/images/stde-moore_de.png)
 
 ### VHDL export Moore-Automat
@@ -74,6 +78,9 @@ end BEHAVE;
 ```
 
 ## Authors & Contributors
+
+The original software can be found in the author's [repository](https://github.com/andreas-schwenk/stde-classic).
+Many thanks to Andreas Schwenk for publishing his software.
 
 ### Initial Development - STDE
 * **Andreas Schwenk** – Original Concept & Initial Implementation
