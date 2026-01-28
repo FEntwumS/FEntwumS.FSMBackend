@@ -5,7 +5,7 @@
  */
 package de.thkoeln.fentwums.fsms.errorHandling;
 
-import fsms.logHandling.LogHandler;
+import de.thkoeln.fentwums.fsms.logHandling.LogHandler;
 import java.util.List;
 import org.junit.After;
 import org.junit.AfterClass;
