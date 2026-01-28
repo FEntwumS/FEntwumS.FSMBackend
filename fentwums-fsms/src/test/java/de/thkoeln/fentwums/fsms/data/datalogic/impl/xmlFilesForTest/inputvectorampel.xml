@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<inputvectors>
+    <vectors>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="0"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="1"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="1"/>
+            <signal name="Timer" value="2"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="3"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="4"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="5"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="6"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="7"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="8"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="0"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="1"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="1"/>
+            <signal name="Timer" value="2"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="3"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="4"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="5"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="6"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="7"/>
+        </vector>
+        <vector>
+            <signal name="Knopf" value="0"/>
+            <signal name="Timer" value="8"/>
+        </vector>
+    </vectors>
+</inputvectors>

@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" profile="diagram" name="Unbenannt" initial="state1">
+
+  <signals>
+  </signals>
+
+  <variables>
+    <var name = "var1" type = "bit"/>
+    <var name = "var2" type = "integer" size = "16" />
+    <var name = "var3" type = "integer" size = "16" />
+    <var name = "var4" type = "bit"/>
+  </variables>
+
+  <states>
+    <state id = "state1">
+      <position x="240" y="144" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "1 " target = "state2">
+          <conditionPosition x="220" y="200"/>
+          <startPoint x="125" y="221"/>
+          <endPoint x="195" y="291"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <onentry>
+        <assign variable = "var1" expr = "var4 + var1"/>
+      </onentry>
+      <during>
+      </during>
+    </state>
+
+    <state id = "state2">
+      <position x="160" y="256" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "1 " target = "state2">
+          <conditionPosition x="260" y="290"/>
+          <startPoint x="222" y="318"/>
+          <endPoint x="196" y="292"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <onentry>
+        <assign variable = "var2" expr = "var2 + 1"/>
+      </onentry>
+      <onentry>
+        <assign variable = "var2" expr = "var2 + 1"/>
+      </onentry>
+      <during>
+      </during>
+    </state>
+
+  </states>
+
+  <startNode target="state1" condition="1">
+    <conditionPosition x="266" y="56"/>
+    <position x="253" y="45"/>
+    <targetPosition x="240" y="240"/>
+  </startNode>
+</scxml>

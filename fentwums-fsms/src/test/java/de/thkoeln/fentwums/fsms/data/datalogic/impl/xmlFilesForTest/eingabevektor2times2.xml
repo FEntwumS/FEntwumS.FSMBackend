@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<inputvectors>
+	<vectors>
+		<vector>
+			<signal name="signal11" value="1"/>
+			<signal name="signal12" value="2"/>
+		</vector>
+		<vector>
+			<signal name="signal21" value="3"/>
+			<signal name="signal22" value="4"/>
+		</vector>
+	</vectors>
+</inputvectors>

@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" profile="diagram" name="test" initial="namestate1">
+
+  <signals>
+    <signal name = "signalIn1" dir="in" type = "integer" size = "16" />
+    <signal name = "signalIn2" dir="in" type = "integer" size = "16" />
+    <signal name = "signalIn3" dir="in" type = "integer" size = "16" />
+    <signal name = "signal2" dir="out" type = "bit"/>
+  </signals>
+
+  <variables>
+    <var name = "varname1" type = "integer" size = "16" />
+    <var name = "varnam2" type = "bit"/>
+  </variables>
+
+  <states>
+    <state id = "namestate1">
+      <position x="224" y="224" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "signalIn1 and signalIn2" target = "namestate2">
+          <conditionPosition x="56" y="279"/>
+          <startPoint x="157" y="349"/>
+          <endPoint x="156" y="348"/>
+          <ctrlPoints>
+            <ctrlPoint x="116" y="246"/>
+            <ctrlPoint x="68" y="321"/>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "signalIn1 or signalIn2" target = "namestate1">
+          <conditionPosition x="346" y="222"/>
+          <startPoint x="286" y="286"/>
+          <endPoint x="286" y="286"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "signalIn1 == signalIn2" target = "namestate3">
+          <conditionPosition x="391" y="326"/>
+          <startPoint x="532" y="468"/>
+          <endPoint x="434" y="370"/>
+          <ctrlPoints>
+            <ctrlPoint x="411" y="317"/>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "signal2" expr = "1"/>
+      </during>
+    </state>
+
+    <state id = "namestate2">
+      <position x="192" y="384" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "signalIn1 or signalIn2 and signalIn3" target = "namestate3">
+          <conditionPosition x="325" y="462"/>
+          <startPoint x="532" y="468"/>
+          <endPoint x="434" y="370"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "signal2" expr = "1"/>
+      </during>
+    </state>
+
+    <state id = "namestate3">
+      <position x="496" y="432" />
+      <size width="144" height="64" />
+      <transitions>
+      </transitions>
+      <during>
+        <assign signal = "signal2" expr = "1"/>
+      </during>
+    </state>
+
+  </states>
+
+  <startNode target="namestate1" condition="1">
+    <conditionPosition x="149" y="131"/>
+    <position x="132" y="104"/>
+    <targetPosition x="188" y="188"/>
+  </startNode>
+</scxml>

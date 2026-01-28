@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" profile="diagram" name="Ampelsteuerung" initial="Rot">
+
+  <signals>
+    <signal name = "lampe_rot" dir="out" type = "bit"/>
+    <signal name = "lampe_gelb" dir="out" type = "bit"/>
+    <signal name = "lampe_gruen" dir="out" type = "bit"/>
+    <signal name = "Knopf" dir="in" type = "bit"/>
+    <signal name = "Timer" dir="in" type = "integer" size = "16" />
+  </signals>
+
+  <variables>
+  </variables>
+
+  <states>
+    <state id = "Rot">
+      <position x="240" y="112" />
+      <size width="160" height="160" />
+      <transitions>
+        <transition cond = "Knopf " target = "RotGelb">
+          <conditionPosition x="62" y="151"/>
+          <startPoint x="43" y="235"/>
+          <endPoint x="68" y="260"/>
+          <ctrlPoints>
+            <ctrlPoint x="84" y="157"/>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "lampe_rot" expr = "1"/>
+        <assign signal = "lampe_gelb" expr = "0"/>
+        <assign signal = "lampe_gruen" expr = "0"/>
+      </during>
+    </state>
+
+    <state id = "RotGelb">
+      <position x="112" y="304" />
+      <size width="176" height="160" />
+      <transitions>
+        <transition cond = "Timer greater_equal 3 " target = "Gruen">
+          <conditionPosition x="86" y="504"/>
+          <startPoint x="229" y="469"/>
+          <endPoint x="196" y="436"/>
+          <ctrlPoints>
+            <ctrlPoint x="23" y="500"/>
+            <ctrlPoint x="113" y="565"/>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "Timer less_than 3 " target = "RotGelb">
+          <conditionPosition x="275" y="319"/>
+          <startPoint x="188" y="380"/>
+          <endPoint x="188" y="380"/>
+          <ctrlPoints>
+            <ctrlPoint x="252" y="290"/>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "lampe_rot" expr = "1"/>
+        <assign signal = "lampe_gelb" expr = "1"/>
+        <assign signal = "lampe_gruen" expr = "0"/>
+      </during>
+    </state>
+
+    <state id = "Gruen">
+      <position x="272" y="512" />
+      <size width="176" height="176" />
+      <transitions>
+        <transition cond = "Timer greater_equal 5 " target = "Gelb">
+          <conditionPosition x="456" y="537"/>
+          <startPoint x="540" y="396"/>
+          <endPoint x="464" y="320"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "Timer less_than 5 " target = "Gruen">
+          <conditionPosition x="240" y="375"/>
+          <startPoint x="196" y="436"/>
+          <endPoint x="315" y="555"/>
+          <ctrlPoints>
+            <ctrlPoint x="238" y="384"/>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "lampe_rot" expr = "0"/>
+        <assign signal = "lampe_gelb" expr = "0"/>
+        <assign signal = "lampe_gruen" expr = "1"/>
+      </during>
+    </state>
+
+    <state id = "Gelb">
+      <position x="464" y="320" />
+      <size width="176" height="176" />
+      <transitions>
+        <transition cond = "Timer greater_equal 8 " target = "Rot">
+          <conditionPosition x="415" y="116"/>
+          <startPoint x="196" y="68"/>
+          <endPoint x="309" y="181"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "Timer less_than 8 " target = "Gelb">
+          <conditionPosition x="633" y="371"/>
+          <startPoint x="508" y="364"/>
+          <endPoint x="540" y="396"/>
+          <ctrlPoints>
+            <ctrlPoint x="613" y="348"/>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "lampe_rot" expr = "0"/>
+        <assign signal = "lampe_gelb" expr = "1"/>
+        <assign signal = "lampe_gruen" expr = "0"/>
+      </during>
+    </state>
+
+  </states>
+
+  <startNode target="Rot" condition="1">
+    <conditionPosition x="91" y="44"/>
+    <position x="48" y="80"/>
+    <targetPosition x="171" y="171"/>
+  </startNode>
+</scxml>

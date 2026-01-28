@@ -10,6 +10,7 @@
 
     <modules>
         <module>fentwums-fsm</module>
+        <module>fentwums-fsms</module>
     </modules>
 
     <properties>
