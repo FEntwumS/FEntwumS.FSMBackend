@@ -49,24 +49,28 @@ public class ImageAdministration {
 
     /**
      * Create List of Images
-     *
-     * @return
-     * @author Marvin Jolk
      */
     private List<Image> createImageList() {
-        String path = "fsms/res/logo/";
-        ImageIcon img16_16 = new ImageIcon(getClass().getClassLoader().getResource(path+"logo16_16.png"));
-        ImageIcon img32_32 = new ImageIcon(getClass().getClassLoader().getResource(path+"logo32_32.png"));
-        ImageIcon img64_64 = new ImageIcon(getClass().getClassLoader().getResource(path+"logo64_64.png"));
-        ImageIcon img128_128 = new ImageIcon(getClass().getClassLoader().getResource(path+"logo128_128.png"));
-        ImageIcon img256_256 = new ImageIcon(getClass().getClassLoader().getResource(path+"logo256_256.png"));
+        // 1. Correct the path: remove 'src' and ensure leading/trailing slashes are handled
+        // In a JAR, your package is the path.
+        String path = "fsms/logo/";
 
-        List<Image> icons = new ArrayList<Image>();
-        icons.add(img16_16.getImage());
-        icons.add(img32_32.getImage());
-        icons.add(img64_64.getImage());
-        icons.add(img128_128.getImage());
-        icons.add(img256_256.getImage());
+        int[] sizes = {16, 32, 64, 128, 256};
+        List<Image> icons = new ArrayList<>();
+
+        for (int size : sizes) {
+            String fullPath = path + "logo" + size + "_" + size + ".png";
+
+            // 2. Use the ClassLoader to find the resource
+            var resource = getClass().getClassLoader().getResource(fullPath);
+
+            if (resource != null) {
+                icons.add(new ImageIcon(resource).getImage());
+            } else {
+                // Log a warning or handle the missing icon gracefully
+                System.err.println("Could not find resource: " + fullPath);
+            }
+        }
         return icons;
     }
 }
