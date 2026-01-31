@@ -57,6 +57,7 @@ public class ErrorHandlerTest {
      */
     @Test
     public void testGetErrors0() {
+        instance.reset();
         System.out.println("getErrors0");
         List result = instance.getErrors();
         assertEquals(0, result.size());

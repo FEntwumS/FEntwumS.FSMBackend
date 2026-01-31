@@ -48,7 +48,7 @@ public class InputVectorParserTest {
     @Test
     public void testMultipleVectors0() {
         System.out.println("runMultipleVectors0");
-        SignalVectorList sigVec = instance.getInputVector("test/fsms/data/datalogic/impl/xmlFilesForTest/eingabevektor2times2.xml");
+        SignalVectorList sigVec = instance.getInputVector("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/eingabevektor2times2.xml");
         SignalVectorList sigVecPruf = new SignalVectorList();
         sigVecPruf.setSignalsVectorList(createSignalVectorList1());
 
@@ -63,7 +63,7 @@ public class InputVectorParserTest {
     @Test
     public void testMultipleSignals() {
         System.out.println("runMultipleVectors0");
-        SignalVectorList sigVec = instance.getInputVector("test/fsms/data/datalogic/impl/xmlFilesForTest/eingabevektor2times2.xml");
+        SignalVectorList sigVec = instance.getInputVector("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/eingabevektor2times2.xml");
         SignalVectorList sigVecPruf = new SignalVectorList();
         sigVecPruf.setSignalsVectorList(createSignalVectorList1());
 

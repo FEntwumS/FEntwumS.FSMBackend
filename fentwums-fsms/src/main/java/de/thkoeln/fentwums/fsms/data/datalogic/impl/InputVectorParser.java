@@ -39,7 +39,7 @@ public class InputVectorParser implements IInputVector {
             //Vorbereitung zum einlesen der XML-Datei
             xmlPath = xmlPath.replace("\\", "/");
 
-            if (new File(xmlPath) == null) {
+            if (!new File(xmlPath).exists()) {
                 errorHandler.addError("File path is not correct");
                 return null;
             }

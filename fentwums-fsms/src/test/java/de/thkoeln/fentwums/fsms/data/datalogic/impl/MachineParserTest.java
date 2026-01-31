@@ -62,7 +62,7 @@ public class MachineParserTest {
     @Test
     public void testMultipleSignals0() {
         System.out.println("runMultipleSignals0");
-        Automaton testAutomaton = createAutomaton("test/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
+        Automaton testAutomaton = createAutomaton("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
 
         ArrayList<Signal> signals = createSignalsForCompleteMoore();
 
@@ -79,7 +79,7 @@ public class MachineParserTest {
     @Test
     public void testMultipleVariables0() {
         System.out.println("runVariablesSignals0");
-        Automaton testAutomaton = createAutomaton("test/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
+        Automaton testAutomaton = createAutomaton("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
         ArrayList<Variable> variables = new ArrayList<Variable>();
         Variable variable1 = new Variable();
         Variable variable2 = new Variable();
@@ -105,7 +105,7 @@ public class MachineParserTest {
     @Test
     public void testMultipleStates0() {
         System.out.println("runMultipleStates0");
-        Automaton testAutomaton = createAutomaton("test/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
+        Automaton testAutomaton = createAutomaton("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
         ArrayList<State> states = createStatesForCompleteMoore();
 
         assertEquals(states.size(), testAutomaton.getStates().size());
@@ -123,7 +123,7 @@ public class MachineParserTest {
     @Test
     public void testMultipleTransitionsOneState0() {
         System.out.println("runMultipleTransitionsState0");
-        Automaton testAutomaton = createAutomaton("test/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
+        Automaton testAutomaton = createAutomaton("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
         ArrayList<State> states = createStatesForCompleteMoore();
 
         for (int i = 0; i < states.get(0).getTransitions().size(); i++) {
@@ -150,7 +150,7 @@ public class MachineParserTest {
         System.out.println("runStartNode0");
         StartNode startNode = createStartNode();
 
-        Automaton testAutomaton = createAutomaton("test/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
+        Automaton testAutomaton = createAutomaton("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
         StartNode underTestStartNode = testAutomaton.getStartNode();
 
         assertEquals(startNode.getTarget().getName(), underTestStartNode.getTarget().getName());
@@ -166,7 +166,7 @@ public class MachineParserTest {
     @Test
     public void testOnEntry0() {
         System.out.println("runOnEntry0");
-        Automaton underTest = createAutomaton("test/fsms/data/datalogic/impl/xmlFilesForTest/testOnEntry.xml");
+        Automaton underTest = createAutomaton("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/testOnEntry.xml");
 
         ArrayList<String> referenceTable1 = new ArrayList<>();
         referenceTable1.add("var1 = var4 + var1");
@@ -184,7 +184,7 @@ public class MachineParserTest {
     @Test
     public void testSignals0() {
         System.out.println("runSignals0");
-        Automaton underTest = createAutomaton("test/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
+        Automaton underTest = createAutomaton("src/test/java/de/thkoeln/fentwums/fsms/data/datalogic/impl/xmlFilesForTest/mooreCompleteMachine.xml");
 
         List<Signal> signals = underTest.getSignals();
         String name = "signal2";
