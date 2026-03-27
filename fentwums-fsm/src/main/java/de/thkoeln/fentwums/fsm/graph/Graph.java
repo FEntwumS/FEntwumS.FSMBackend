@@ -17,6 +17,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -1034,7 +1035,12 @@ public class Graph implements I_GRAPH
             comp.fixAssociations();
         }
     }
-    
+
+    @Override
+    public void loadXML(File file) throws IOException {
+
+    }
+
     /**
      * Gets the "legend" of the output-vector.
      * An output-vector is a comma-separated String, that hold the output

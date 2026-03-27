@@ -17,6 +17,7 @@ import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
@@ -36,7 +37,8 @@ public interface I_GRAPH
     public void                 render(Graphics2D g2d, Font font, Point mousePosition);
     
     // load and save
-    public void                 loadGraph(DataInputStream in, int fileVersion) throws IOException;   
+    public void                 loadGraph(DataInputStream in, int fileVersion) throws IOException;
+    public void                 loadXML(File file) throws IOException;
     public void                 saveGraph(DataOutputStream out) throws IOException;
     
     // selection
