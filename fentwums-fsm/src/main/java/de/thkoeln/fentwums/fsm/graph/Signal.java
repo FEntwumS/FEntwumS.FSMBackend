@@ -67,7 +67,21 @@ public class Signal extends SigVar
      */
     public Signal(DataInputStream in, Graph graph) throws IOException
     {
-        loadFromFile(in, graph);        
+        loadFromFile(in, graph);
+    }
+
+    /**
+     * Constructor. Creates a Signal from a given data-array.
+     *
+     * @param signal data-array
+     * @param graph owner
+     * @throws IOException
+     *
+     * @author Tunc Koldas
+     */
+    public Signal(String[] signal, Graph graph) throws IOException
+    {
+        loadFromFile(signal, graph);
     }
     
     /**
@@ -89,22 +103,29 @@ public class Signal extends SigVar
     public void setDirection(SIGNAL_DIRECTION direction) {
         this.direction = direction;
     }
-    
     /**
      * for explanation: see superclass "SigVar"
-     * 
+     *
      * @param in
      * @param graph
-     * @throws IOException 
-     * 
+     * @throws IOException
+     *
      * @author Andreas Schwenk
      */
     @Override
     public final void loadFromFile(DataInputStream in, Graph graph) throws IOException
     {
         super.loadSigVarFromFile(in, graph);
-        
+
         direction = SIGNAL_DIRECTION.valueOf(in.readUTF());
+    }
+
+
+    public final void loadFromFile(String[] signal, Graph graph) throws IOException
+    {
+        super.loadSigVarFromFile(signal, graph);
+        
+        direction = SIGNAL_DIRECTION.valueOf(signal[1].toUpperCase());
     }
     
     /**

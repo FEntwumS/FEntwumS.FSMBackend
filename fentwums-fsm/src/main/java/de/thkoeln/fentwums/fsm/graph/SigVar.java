@@ -151,6 +151,46 @@ public abstract class SigVar
         bitLength = in.readInt();
         parent = graph;
     }
+    public void loadSigVarFromFile(String[] signal, Graph graph) throws IOException
+    {
+        name = signal[0];
+        type = SIGVAR_TYPE.valueOf(signal[2]);
+        switch (signal[2].toUpperCase()) {
+            case "BIT":
+                bitLength = 1;
+                break;
+            case "BIT_N":
+                bitLength = 8;
+                break;
+            case "SIGNED", "UNSIGNED":
+                bitLength = 16;
+                break;
+            case "vector":
+                bitLength = Integer.parseInt(signal[3]);
+                break;
+        }
+        parent = graph;
+    }
+    public void loadVarFromFile(String[] signal, Graph graph) throws IOException //TODO: CHECK IF IT WORKS
+    {
+        name = signal[0];
+        type = SIGVAR_TYPE.valueOf(signal[1]);
+        switch (signal[1].toUpperCase()) {
+            case "BIT":
+                bitLength = 1;
+                break;
+            case "BIT_N":
+                bitLength = 8;
+                break;
+            case "INTEGER":
+                bitLength = 16;
+                break;
+            case "vector":
+                bitLength = Integer.parseInt(signal[2]);
+                break;
+        }
+        parent = graph;
+    }
     
     /**
      * Abstract method. Derived methods load signals/variables data from file.

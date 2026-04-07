@@ -176,6 +176,14 @@ public class Transition extends Component
         }
     }
 
+    public Transition(Graph graph, State fromState, State toState) {
+        this(graph, false);
+        if (fromState != null) {
+            this.fromState = new StateConnection(fromState, 0);
+        }
+        this.toState = new StateConnection(toState, 0);
+    }
+    
     /**
      * Constructor. Creates a Transition from a given file (more precisely:
      *  a given data-input-stream).
@@ -1236,8 +1244,12 @@ public class Transition extends Component
             startNodeStartPos.y -= startNodeStartPos.y % 16;
         }
     }
-    
- 
+
+    public void setMealyOutputString(String text) {
+        if(mealyOutput != null)
+            mealyOutput.setText(text);
+    }
+
     /**
      * gets the output-string in case of Mealy
      * 
@@ -1502,4 +1514,7 @@ public class Transition extends Component
         
     }
 
+    public void setIsStartNode(boolean isStartNode) {
+        this.isStartNode = isStartNode;
+    }
 }

@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<scxml xmlns="http://www.w3.org/2005/07/scxml" version="1.0" profile="diagram" name="Lift_Moore_Emergency" initial="OFF" graph_type="moore">
+
+  <signals>
+    <signal name = "XON" dir="in" type = "bit"/>
+    <signal name = "XTOP" dir="in" type = "bit"/>
+    <signal name = "XBOTTOM" dir="in" type = "bit"/>
+    <signal name = "XDO" dir="in" type = "bit"/>
+    <signal name = "XUP" dir="in" type = "bit"/>
+    <signal name = "YUP" dir="out" type = "bit"/>
+    <signal name = "YDOWN" dir="out" type = "bit"/>
+    <signal name = "YEmerg" dir="out" type = "bit"/>
+  </signals>
+
+  <variables>
+  </variables>
+
+  <states>
+    <state id = "OFF">
+      <position x="368" y="128" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "XON " target = "IDLE">
+          <conditionPosition x="438" y="209"/>
+          <startPoint x="404" y="324"/>
+          <endPoint x="403" y="323"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "YUP" expr = "0"/>
+        <assign signal = "YDOWN" expr = "0"/>
+        <assign signal = "YEmerg" expr = "0"/>
+      </during>
+    </state>
+
+    <state id = "IDLE">
+      <position x="368" y="288" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "not XON " target = "OFF">
+          <conditionPosition x="338" y="207"/>
+          <startPoint x="332" y="92"/>
+          <endPoint x="333" y="93"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "XON and XDO and XUP and not XTOP " target = "UP">
+          <conditionPosition x="193" y="300"/>
+          <startPoint x="8" y="152"/>
+          <endPoint x="116" y="260"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "XON and XDO and not XUP and not XBOTTOM " target = "DOWN">
+          <conditionPosition x="559" y="295"/>
+          <startPoint x="744" y="296"/>
+          <endPoint x="637" y="189"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "YUP" expr = "0"/>
+        <assign signal = "YDOWN" expr = "0"/>
+        <assign signal = "YEmerg" expr = "0"/>
+      </during>
+    </state>
+
+    <state id = "UP">
+      <position x="80" y="224" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "XTOP and XON " target = "IDLE">
+          <conditionPosition x="214" y="214"/>
+          <startPoint x="440" y="360"/>
+          <endPoint x="306" y="226"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "not XON " target = "Emergency">
+          <conditionPosition x="194" y="380"/>
+          <startPoint x="368" y="448"/>
+          <endPoint x="306" y="386"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "YUP" expr = "1"/>
+        <assign signal = "YDOWN" expr = "0"/>
+        <assign signal = "YEmerg" expr = "0"/>
+      </during>
+    </state>
+
+    <state id = "DOWN">
+      <position x="672" y="224" />
+      <size width="144" height="64" />
+      <transitions>
+        <transition cond = "XBOTTOM and XON " target = "IDLE">
+          <conditionPosition x="520" y="217"/>
+          <startPoint x="296" y="216"/>
+          <endPoint x="430" y="350"/>
+          <ctrlPoints>
+          </ctrlPoints>
+        </transition>
+        <transition cond = "not XON " target = "Emergency">
+          <conditionPosition x="605" y="374"/>
+          <startPoint x="368" y="448"/>
+          <endPoint x="430" y="510"/>
+          <ctrlPoints>
+            <ctrlPoint x="582" y="378"/>
+          </ctrlPoints>
+        </transition>
+      </transitions>
+      <during>
+        <assign signal = "YUP" expr = "0"/>
+        <assign signal = "YDOWN" expr = "1"/>
+        <assign signal = "YEmerg" expr = "0"/>
+      </during>
+    </state>
+
+    <state id = "Emergency">
+      <position x="368" y="448" />
+      <size width="144" height="64" />
+      <transitions>
+      </transitions>
+      <during>
+        <assign signal = "YUP" expr = "0"/>
+        <assign signal = "YDOWN" expr = "0"/>
+        <assign signal = "YEmerg" expr = "1"/>
+      </during>
+    </state>
+
+  </states>
+
+  <startNode target="OFF" condition="1">
+    <conditionPosition x="293" y="59"/>
+    <position x="276" y="58"/>
+    <targetPosition x="332" y="332"/>
+  </startNode>
+</scxml>

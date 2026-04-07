@@ -132,6 +132,12 @@ public class State extends Component
         name.setActive(true);
     }
 
+    public State(Graph graph, int x, int y, int width, int height) {
+        this(graph);
+        setPosition(new Point(x, y));
+        setSize(new Point(width, height));
+    }
+
     /**
      * Constructor. Creates a State from a given file (more precisely:
      *  a given data-input-stream).
@@ -159,6 +165,12 @@ public class State extends Component
             return mooreOutput.getText();
         else
             return null;
+    }
+
+    public void setMooreOutputString(String text) {
+        if (mooreOutput != null) {
+            mooreOutput.setText(text);
+        }
     }
 
     /**

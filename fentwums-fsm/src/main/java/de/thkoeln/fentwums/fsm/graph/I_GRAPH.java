@@ -38,7 +38,6 @@ public interface I_GRAPH
     
     // load and save
     public void                 loadGraph(DataInputStream in, int fileVersion) throws IOException;
-    public void                 loadXML(File file) throws IOException;
     public void                 saveGraph(DataOutputStream out) throws IOException;
     
     // selection

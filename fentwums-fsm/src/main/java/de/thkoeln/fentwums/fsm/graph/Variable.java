@@ -61,6 +61,9 @@ public class Variable extends SigVar
     {
         loadFromFile(in, graph);
     }
+    public Variable(String[] var, Graph graph) throws IOException {
+        super.loadVarFromFile(var, graph);
+    }
     
     /**
      * for explanation: see superclass "SigVar"
@@ -76,6 +79,7 @@ public class Variable extends SigVar
     {
         super.loadSigVarFromFile(in, graph);
     }
+
 
     /**
      * for explanation: see superclass "SigVar"

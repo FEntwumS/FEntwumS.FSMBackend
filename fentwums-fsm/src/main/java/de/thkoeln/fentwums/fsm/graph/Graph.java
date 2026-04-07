@@ -21,6 +21,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The graph is the core of this project: It stores all Components, signals and
@@ -859,6 +872,15 @@ public class Graph implements I_GRAPH
         
         return stateList;
     }
+
+    private State getStateByName(String name) {
+        for (State state : getStates()) {
+            if (state.getName().equals(name)) {
+                return state;
+            }
+        }
+        return null;
+    }
     
     /**
      * gets all transitions of the graph
@@ -1036,11 +1058,181 @@ public class Graph implements I_GRAPH
         }
     }
 
-    @Override
-    public void loadXML(File file) throws IOException {
+
+    public void loadGraph(File file) throws IOException {
+        try {
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(file);
+
+            Element root = doc.getDocumentElement();
+            graphType = GRAPH_TYPE.valueOf(root.getAttribute("graph_type").toUpperCase()); // get graph_type
+            name = root.getAttribute("name"); // get graph name
+
+            // 1. Get the specific parent element
+            NodeList signalsParents = doc.getElementsByTagName("signals");
+
+            if (signalsParents.getLength() > 0) {
+                // We take the first <signals> tag found
+                Element signalsContainer = (Element) signalsParents.item(0);
+
+                // 2. Search ONLY inside that container
+                NodeList signalList = signalsContainer.getElementsByTagName("signal");
+
+                for (int i = 0; i < signalList.getLength(); i++) {
+                    String[] signal;
+                    Element el = (Element) signalList.item(i);
+                    if(el.getAttribute("size").isBlank()){
+                         signal= new String[]{el.getAttribute("name"), el.getAttribute("dir").toUpperCase(), el.getAttribute("type").toUpperCase()};
+                    }
+                    else {
+                        signal = new String[]{el.getAttribute("name"), el.getAttribute("dir").toUpperCase(), el.getAttribute("type").toUpperCase(), el.getAttribute("size").toUpperCase()};
+                    }
+                    Signal s = new Signal(signal, this);//TODO: CHECK IF THIS WORKS (VECTOR LENGTH)
+                    signals.add(s);
+                }
+            }
+
+            NodeList variablesParents = doc.getElementsByTagName("variables");
+            if (variablesParents.getLength() > 0) {
+                // We take the first <signals> tag found
+                Element varsContainer = (Element) variablesParents.item(0);
+
+                // 2. Search ONLY inside that container
+                NodeList variablesList = varsContainer.getElementsByTagName("variable");
+
+                for (int i = 0; i < variablesList.getLength(); i++) {
+                    String[] variable;
+                    Element el = (Element) variablesList.item(i);
+                    if(el.getAttribute("size").isBlank()){
+                        variable= new String[]{el.getAttribute("name"), el.getAttribute("type").toUpperCase()};
+                    }
+                    else {
+                        variable = new String[]{el.getAttribute("name"), el.getAttribute("type").toUpperCase(), el.getAttribute("size").toUpperCase()};
+                    }
+                    Variable v = new Variable(variable, this);
+                    variables.add(v);
+                }
+            }
+            NodeList statesParents = doc.getElementsByTagName("states");
+            Element statesContainer = (Element) statesParents.item(0);
+
+            // 2. Search ONLY inside that container
+            NodeList statesList = statesContainer.getElementsByTagName("state");
+
+            for (int i = 0; i < statesList.getLength(); i++) {
+                Element el = (Element) statesList.item(i);
+                String stateId = el.getAttribute("id");
+
+                NodeList positionList = el.getElementsByTagName("position");
+                int x = 0, y = 0;
+                if (positionList.getLength() > 0) {
+                    Element positionEl = (Element) positionList.item(0);
+                    x = Integer.parseInt(positionEl.getAttribute("x"));
+                    y = Integer.parseInt(positionEl.getAttribute("y"));
+                }
+
+                NodeList sizeList = el.getElementsByTagName("size");
+                int width = 0, height = 0;
+                if (sizeList.getLength() > 0) {
+                    Element sizeEl = (Element) sizeList.item(0);
+                    width = Integer.parseInt(sizeEl.getAttribute("width"));
+                    height = Integer.parseInt(sizeEl.getAttribute("height"));
+                }
+
+                State s = new State(this, x, y, width, height);
+                s.setName(stateId);
+                
+                if (graphType == GRAPH_TYPE.MOORE) {
+                    NodeList duringList = el.getElementsByTagName("during");
+                    if (duringList.getLength() > 0) {
+                        Element duringEl = (Element) duringList.item(0);
+                        NodeList assignList = duringEl.getElementsByTagName("assign");
+                        StringBuilder mooreOutputBuilder = new StringBuilder();
+                        for (int j = 0; j < assignList.getLength(); j++) {
+                            Element assignEl = (Element) assignList.item(j);
+                            mooreOutputBuilder.append(assignEl.getAttribute("expr"));
+                            if (j < assignList.getLength() - 1) {
+                                mooreOutputBuilder.append(", ");
+                            }
+                        }
+                        s.setMooreOutputString(mooreOutputBuilder.toString());
+                    }
+                }
+                
+                components.add(s);
+            }
+
+            for (int i = 0; i < statesList.getLength(); i++) {
+                Element el = (Element) statesList.item(i);
+                String stateId = el.getAttribute("id");
+                State fromState = getStateByName(stateId);
+
+                NodeList transitionList = el.getElementsByTagName("transition");
+                for (int j = 0; j < transitionList.getLength(); j++) {
+                    Element transEl = (Element) transitionList.item(j);
+                    String targetStateId = transEl.getAttribute("target");
+                    State toState = getStateByName(targetStateId);
+                    String condition = transEl.getAttribute("cond").replace("and","&&").replace("or","||").replace("not","!");
+
+                    if (fromState != null && toState != null) {
+                        Transition t = new Transition(this, fromState, toState);
+                        t.setCondition(condition);
+                        
+                        if (graphType == GRAPH_TYPE.MEALY) {
+                            NodeList assignList = transEl.getElementsByTagName("assign");
+                            if (assignList.getLength() > 0) {
+                                StringBuilder mealyOutputBuilder = new StringBuilder();
+                                for (int k = 0; k < assignList.getLength(); k++) {
+                                    Element assignEl = (Element) assignList.item(k);
+                                    mealyOutputBuilder.append(assignEl.getAttribute("expr"));
+                                    if (k < assignList.getLength() - 1) {
+                                        mealyOutputBuilder.append(", ");
+                                    }
+                                }
+                                t.setMealyOutputString(mealyOutputBuilder.toString());
+                            }
+                        }
+                        
+                        components.add(t);
+                        fromState.addTransition(t);
+                    }
+                }
+            }
+
+            NodeList startNodeList = doc.getElementsByTagName("startNode");
+            if (startNodeList.getLength() > 0) {
+                Element startNodeEl = (Element) startNodeList.item(0);
+                String startStateId = startNodeEl.getAttribute("target");
+                State startState = getStateByName(startStateId);
+                if (startState != null) {
+                    startNode = new Transition(this, null, startState);
+                    startNode.setIsStartNode(true);
+                    
+                    if (graphType == GRAPH_TYPE.MEALY) {
+                        NodeList assignList = startNodeEl.getElementsByTagName("assign");
+                        if (assignList.getLength() > 0) {
+                            StringBuilder mealyOutputBuilder = new StringBuilder();
+                            for (int k = 0; k < assignList.getLength(); k++) {
+                                Element assignEl = (Element) assignList.item(k);
+                                mealyOutputBuilder.append(assignEl.getAttribute("expr"));
+                                if (k < assignList.getLength() - 1) {
+                                    mealyOutputBuilder.append(", ");
+                                }
+                            }
+                            startNode.setMealyOutputString(mealyOutputBuilder.toString());
+                        }
+                    }
+                }
+            }
+
+
+            } catch(ParserConfigurationException | SAXException e){
+                throw new RuntimeException(e);
+            }
 
     }
-
+        
     /**
      * Gets the "legend" of the output-vector.
      * An output-vector is a comma-separated String, that hold the output
