@@ -55,6 +55,7 @@ public class Generation implements I_GENERATION {
     private Log errorLog = new Log(); // error-logging
 
     private boolean verification_passed = true;
+    private boolean determinism_passed = true;
 
     // *** METHODS ***
     /**
@@ -165,20 +166,20 @@ public class Generation implements I_GENERATION {
                     isDeterministic = false;
                 }
             }
-            if (!stateIsComplete) {
+           /* if (!stateIsComplete) {
                 errorLog.append("In einem Übergang des Zustands " + state.getName()
                         + "\n wurde kein Folgezustand für Testwerte gefunden.");
-            }
+            }*/
             if (!stateIsDeterministic) {
                 errorLog.append("Vom Zustand " + state.getName() + " wurde mehr"
                         + "\n als ein Übergang in Folgezustände gefunden.");
             }
         }
-        if (isComplete) {
+       /* if (isComplete) {
             errorLog.append(">> Der Graph ist vollständig. <<");
         } else {
             errorLog.append(">> Der Graph is NICHT vollständig! <<");
-        }
+        }*/
         if (isDeterministic) {
             errorLog.append(">> Der Graph ist deterministisch. <<");
         } else {
@@ -569,9 +570,9 @@ public class Generation implements I_GENERATION {
         errorLog.append("");
 
         if (success) {
-            errorLog.append(">> VERIFIKATION ERFOLGREICH! <<\n");
+            errorLog.append(">> VERIFIKATION ERFOLGREICH! <<");
         } else {
-            errorLog.append(">> VERIFIKATION NICHT ERFOLGREICH! <<\n");
+            errorLog.append(">> VERIFIKATION NICHT ERFOLGREICH! <<");
         }
 
         verification_passed = success;
@@ -931,9 +932,12 @@ public class Generation implements I_GENERATION {
      */
     @Override
     public String generateCode_C(File file_h, File file_c, File file_e, Graph graph) throws IOException {
-        // verify graph
+
+        checkIntegrityAndDeterminism(graph);
+
         verifyGraphAndPartialGenerate(graph);
-        if (!verification_passed) {
+
+        if (!verification_passed||!determinism_passed) {
             return errorLog.getLogString();
         }
 
@@ -1438,6 +1442,7 @@ public class Generation implements I_GENERATION {
     public String generateCode_VHDL(File file, Graph graph, boolean useProcess) throws IOException {
         // verify graph
         verifyGraphAndPartialGenerate(graph);
+        checkIntegrityAndDeterminism(graph);
         if (!verification_passed) {
             return errorLog.getLogString();
         }

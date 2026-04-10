@@ -38,23 +38,16 @@ public class CLIWorkflow {
         }
     }
 
-    public String exportAsSCXML(File file) {
-        try {
-            return logString = generation.exportAsSCXML(file, graph);
-        } catch (IOException exception) {
-            return logString = "Export als SCXML fehlgeschlagen!";
-        }
-    }
     public void loadFile(File file) throws IOException {
         if (file.getName().toLowerCase().endsWith(".xml")) {
             graph.loadGraph(file);
-        } else {
+        } else if(file.getName().toLowerCase().endsWith(".stde")) {
             int fileVersion;
             DataInputStream dis = new DataInputStream(new FileInputStream(file));
             fileVersion = dis.readInt();
             graph.loadGraph(dis, fileVersion);
             dis.close();
-        }
+        } else System.out.println("Ungültiger Dateityp!");
     }
 
 }
