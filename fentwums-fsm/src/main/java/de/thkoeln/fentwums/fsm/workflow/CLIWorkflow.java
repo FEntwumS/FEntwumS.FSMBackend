@@ -39,7 +39,7 @@ public class CLIWorkflow {
     }
 
     public void loadFile(File file) throws IOException {
-        if (file.getName().toLowerCase().endsWith(".xml")) {
+        if (file.getName().toLowerCase().endsWith(".fsmxml")) {
             graph.loadGraph(file);
         } else if(file.getName().toLowerCase().endsWith(".stde")) {
             int fileVersion;

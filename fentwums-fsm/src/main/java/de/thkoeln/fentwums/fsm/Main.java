@@ -20,8 +20,6 @@ public class Main implements Runnable {
     private boolean generateC;
     @CommandLine.Option(names = {"-V", "--target=vhdl"}, description = "Generate VHDL code immediately.")
     private boolean generateVHDL;
-    @CommandLine.Option(names = {"-L", "--target=verilog"}, description = "Generate Verilog code immediately.")
-    private boolean generateVerilog;
     @CommandLine.Option(names = {"-i", "--inputpath"}, description = "Path to the input file.")
     private java.io.File filePath;
     @CommandLine.Option(names = {"-o", "--outputpath"}, description = "Path to the output file.")
@@ -89,9 +87,9 @@ public class Main implements Runnable {
             }
             System.out.println(cliWorkflow.generateCode_C(new java.io.File(outputDirectory + "/"+ justName+".h"), new java.io.File(outputDirectory + "/"+ justName+".c"), new java.io.File(outputDirectory + "/"+ justName+".e")));
         }
-        if (generateVerilog) {
-            System.out.println("Not yet implemented...");
-        }
+//        if (generateVerilog) {
+//            System.out.println("Not yet implemented...");
+//        }
         if (generateVHDL) {
             System.out.println("Performing VHDL-Code generation...");
             if (outputDirectory == null || outputDirectory.isEmpty()) {
