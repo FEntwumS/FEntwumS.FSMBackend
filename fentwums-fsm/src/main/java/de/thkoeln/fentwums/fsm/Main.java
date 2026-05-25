@@ -87,9 +87,6 @@ public class Main implements Runnable {
             }
             System.out.println(cliWorkflow.generateCode_C(new java.io.File(outputDirectory + "/"+ justName+".h"), new java.io.File(outputDirectory + "/"+ justName+".c"), new java.io.File(outputDirectory + "/"+ justName+".e")));
         }
-//        if (generateVerilog) {
-//            System.out.println("Not yet implemented...");
-//        }
         if (generateVHDL) {
             System.out.println("Performing VHDL-Code generation...");
             if (outputDirectory == null || outputDirectory.isEmpty()) {

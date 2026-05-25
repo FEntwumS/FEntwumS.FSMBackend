@@ -194,7 +194,7 @@ public class VariableAssignmentParser
                             else if(v.getType() == SigVar.SIGVAR_TYPE.SIGNED)
                                 genVarAssign.rhsVHDL = "to_integer(to_signed("
                                         +v.getName().toUpperCase()+","+v.getBitLength()+") sll 1)";
-                            else if(v.getType() == SigVar.SIGVAR_TYPE.BIT_N)
+                            else if(v.getType() == SigVar.SIGVAR_TYPE.BIT_N || v.getType() == SigVar.SIGVAR_TYPE.VECTOR)
                                 genVarAssign.rhsVHDL = v.getName().toUpperCase()
                                         + "("+(v.getBitLength()-2)+" downto 0) & '0'";
                             else // BIT
@@ -252,7 +252,7 @@ public class VariableAssignmentParser
                             else if(v.getType() == SigVar.SIGVAR_TYPE.SIGNED)
                                 genVarAssign.rhsVHDL = "to_integer(to_signed("
                                         +v.getName().toUpperCase()+","+v.getBitLength()+") sra 1)";
-                            else if(v.getType() == SigVar.SIGVAR_TYPE.BIT_N)
+                            else if(v.getType() == SigVar.SIGVAR_TYPE.BIT_N || v.getType() == SigVar.SIGVAR_TYPE.VECTOR)
                                 genVarAssign.rhsVHDL = "'0' & " + v.getName().toUpperCase() 
                                         + "("+(v.getBitLength()-1)+" downto 1)";
                             else // BIT
@@ -349,6 +349,7 @@ public class VariableAssignmentParser
                                     genVarAssign.rhsC += lex.getNumber();
                                     switch(varRhs.getType())
                                     {
+                                        case VECTOR:
                                         case BIT_N:
                                             genVarAssign.rhsVHDL += "\"" + 
                                                     String.format("%"+varLhs.getBitLength()+"s", 
@@ -410,6 +411,7 @@ public class VariableAssignmentParser
                             genVarAssign.rhsC = "" + lex.getNumber();
                             switch(varLhs.getType())
                             {
+                                case VECTOR:
                                 case BIT_N:
                                     genVarAssign.rhsVHDL = "\"" + String.format("%"+varLhs.getBitLength()+"s", 
                                                     Integer.toBinaryString(lex.getNumber())).replace(" ", "0")  + "\"";
@@ -438,6 +440,7 @@ public class VariableAssignmentParser
                         genVarAssign.rhsC = genVarAssign.lhs + " + 1";
                         switch(varLhs.getType())
                         {
+                            case VECTOR:
                             case BIT_N:
                                 genVarAssign.rhsVHDL = genVarAssign.lhs + " + \"1\"";
                                 break;
@@ -457,6 +460,7 @@ public class VariableAssignmentParser
                         genVarAssign.rhsC = genVarAssign.lhs + " - 1";
                         switch(varLhs.getType())
                         {
+                            case VECTOR:
                             case BIT_N:
                                 genVarAssign.rhsVHDL = genVarAssign.lhs + " - \"1\"";
                                 break;

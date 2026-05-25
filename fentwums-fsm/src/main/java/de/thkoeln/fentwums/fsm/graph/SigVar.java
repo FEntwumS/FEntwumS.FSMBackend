@@ -31,7 +31,7 @@ import java.io.IOException;
 public abstract class SigVar
 {
     // *** ENUMARATIONS ***
-    public enum SIGVAR_TYPE {BIT, BIT_N, SIGNED, UNSIGNED}; // type
+    public enum SIGVAR_TYPE {BIT, BIT_N, SIGNED, UNSIGNED,VECTOR}; // type
     
     // *** ATTRIBUTES ***
     protected String name;
@@ -154,40 +154,62 @@ public abstract class SigVar
     public void loadSigVarFromFile(String[] signal, Graph graph) throws IOException
     {
         name = signal[0];
-        type = SIGVAR_TYPE.valueOf(signal[2]);
         switch (signal[2].toUpperCase()) {
             case "BIT":
+                type = SIGVAR_TYPE.BIT;
                 bitLength = 1;
                 break;
-            case "BIT_N":
+            case "NIBBLE":
+                type = SIGVAR_TYPE.BIT_N;
+                bitLength = 4;
+                break;
+            case "BYTE":
+                type = SIGVAR_TYPE.BIT_N;
                 bitLength = 8;
                 break;
-            case "SIGNED", "UNSIGNED":
+            case "SIGNED":
+                type = SIGVAR_TYPE.SIGNED;
                 bitLength = 16;
                 break;
-            case "vector":
+            case "UNSIGNED":
+                type = SIGVAR_TYPE.UNSIGNED;
+                bitLength = 16;
+                break;
+            case "VECTOR":
+                type = SIGVAR_TYPE.VECTOR;
                 bitLength = Integer.parseInt(signal[3]);
                 break;
+            default:
+                type = SIGVAR_TYPE.valueOf(signal[2]);
         }
         parent = graph;
     }
     public void loadVarFromFile(String[] signal, Graph graph) throws IOException //TODO: CHECK IF IT WORKS
     {
         name = signal[0];
-        type = SIGVAR_TYPE.valueOf(signal[1]);
         switch (signal[1].toUpperCase()) {
             case "BIT":
+                type = SIGVAR_TYPE.BIT;
                 bitLength = 1;
                 break;
-            case "BIT_N":
+            case "NIBBLE":
+                type = SIGVAR_TYPE.BIT_N;
+                bitLength = 4;
+                break;
+            case "BYTE":
+                type = SIGVAR_TYPE.BIT_N;
                 bitLength = 8;
                 break;
             case "INTEGER":
+                type = SIGVAR_TYPE.SIGNED;
                 bitLength = 16;
                 break;
-            case "vector":
+            case "VECTOR":
+                type = SIGVAR_TYPE.VECTOR;
                 bitLength = Integer.parseInt(signal[2]);
                 break;
+            default:
+                type = SIGVAR_TYPE.valueOf(signal[1]);
         }
         parent = graph;
     }

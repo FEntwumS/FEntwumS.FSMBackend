@@ -258,7 +258,7 @@ public class Generation implements I_GENERATION {
      * of input Vectors --> duplicate each hashmap, add 1 and 0, remove old map
      *
      *
-     * @param intSignals List of all Signals that are not of the type BIT
+     * @param bitSignals List of all Signals that are not of the type BIT
      * @param allInputVectors List of all current input Vectors
      * @return list containing all input vectors
      *
@@ -667,6 +667,7 @@ public class Generation implements I_GENERATION {
                 case BIT:
                     type = "bit";
                     break;
+                case VECTOR:
                 case BIT_N:
                     type = "vector";
                     break;
@@ -720,6 +721,7 @@ public class Generation implements I_GENERATION {
                 case BIT:
                     type = "bit";
                     break;
+                case VECTOR:
                 case BIT_N:
                     type = "vector";
                     break;
@@ -1033,6 +1035,7 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         type = "bool";
                         break;
+                    case VECTOR:
                     case BIT_N:
                     case UNSIGNED:
                         if (bitLen == 1) {
@@ -1125,6 +1128,7 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         type = "bool";
                         break;
+                    case VECTOR:
                     case BIT_N:
                     case UNSIGNED:
                         if (bitLen == 1) {
@@ -1502,6 +1506,7 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         type = "std_logic";
                         break;
+                    case VECTOR:
                     case BIT_N:
                         type = "std_logic_vector(" + (long) (bitLen - 1) + " downto 0)";
                         break;
@@ -1606,6 +1611,7 @@ public class Generation implements I_GENERATION {
                         case BIT:
                             type = "std_logic";
                             break;
+                        case VECTOR:
                         case BIT_N:
                             type = "std_logic_vector(" + (long) (bitLen - 1) + " downto 0)";
                             break;
@@ -1862,6 +1868,7 @@ public class Generation implements I_GENERATION {
                             case BIT:
                                 value = "'" + gov.value + "'";
                                 break;
+                            case VECTOR:
                             case BIT_N:
                                 // convert to binary
                                 value = "\"" + String.format("%" + outSignal.getBitLength() + "s",
@@ -1941,6 +1948,7 @@ public class Generation implements I_GENERATION {
                             case BIT:
                                 value = "'" + gov.value + "'";
                                 break;
+                            case VECTOR:
                             case BIT_N:
                                 // convert to binary
                                 value = "\"" + String.format("%" + outSignal.getBitLength() + "s",
@@ -2062,6 +2070,7 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         value = "'" + gov.value + "'";
                         break;
+                    case VECTOR:
                     case BIT_N:
                         // convert to binary
                         value = "\"" + String.format("%" + outSignal.getBitLength() + "s",

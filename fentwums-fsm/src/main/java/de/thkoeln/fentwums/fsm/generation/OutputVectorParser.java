@@ -241,7 +241,7 @@ public class OutputVectorParser {
                     }
                 } else if (gov.isVectorComponent) {
                     if (iSgn != null) {
-                        if ((iSgn.getType() == SIGVAR_TYPE.BIT_N)
+                        if (((iSgn.getType() == SIGVAR_TYPE.BIT_N) || (iSgn.getType() == SIGVAR_TYPE.VECTOR))
                                 && (0 <= gov.upperBound)
                                 && (gov.upperBound < iSgn.getBitLength())) {
                             generatedOutputVector.add(gov);
@@ -249,7 +249,7 @@ public class OutputVectorParser {
                             errorStr = "Ausgabesignal '" + s.getName() + "' muss gueltige Komponente erhalten";
                         }
                     } else if (var != null) {
-                        if ((var.getType() == SIGVAR_TYPE.BIT_N)
+                        if (((var.getType() == SIGVAR_TYPE.BIT_N) || (var.getType() == SIGVAR_TYPE.VECTOR))
                                 && (0 <= gov.upperBound)
                                 && (gov.upperBound < var.getBitLength())) {
                             generatedOutputVector.add(gov);
@@ -276,24 +276,25 @@ public class OutputVectorParser {
                 }
                 break;
 
+            case VECTOR:
             case BIT_N:
                 if (gov.isNumber) {
                     generatedOutputVector.add(gov);
                 } else if (gov.signal != null) {
-                    if ((gov.signal.getType() == SIGVAR_TYPE.BIT_N)
+                    if (((gov.signal.getType() == SIGVAR_TYPE.BIT_N) || (gov.signal.getType() == SIGVAR_TYPE.VECTOR))
                             && ((!gov.isVectorSlice) && (s.getBitLength() == gov.signal.getBitLength()))) {
                         generatedOutputVector.add(gov);
-                    } else if ((gov.signal.getType() == SIGVAR_TYPE.BIT_N)
+                    } else if (((gov.signal.getType() == SIGVAR_TYPE.BIT_N) || (gov.signal.getType() == SIGVAR_TYPE.VECTOR))
                             && ((gov.isVectorSlice) && (s.getBitLength() == (gov.upperBound - gov.lowerBound + 1)))) {
                         generatedOutputVector.add(gov);
                     } else {
                         errorStr = "Ausgabesignal '" + s.getName() + "' Wert passt nicht";
                     }
                 } else if (gov.variable != null) {
-                    if ((gov.variable.getType() == SIGVAR_TYPE.BIT_N)
+                    if (((gov.variable.getType() == SIGVAR_TYPE.BIT_N) || (gov.variable.getType() == SIGVAR_TYPE.VECTOR))
                             && ((!gov.isVectorSlice) && (s.getBitLength() == gov.variable.getBitLength()))) {
                         generatedOutputVector.add(gov);
-                    } else if ((gov.variable.getType() == SIGVAR_TYPE.BIT_N)
+                    } else if (((gov.variable.getType() == SIGVAR_TYPE.BIT_N) || (gov.variable.getType() == SIGVAR_TYPE.VECTOR))
                             && ((gov.isVectorSlice) && (s.getBitLength() == (gov.upperBound - gov.lowerBound + 1)))) {
                         generatedOutputVector.add(gov);
                     } else {

@@ -1088,7 +1088,7 @@ public class Graph implements I_GRAPH
                     else {
                         signal = new String[]{el.getAttribute("name"), el.getAttribute("dir").toUpperCase(), el.getAttribute("type").toUpperCase(), el.getAttribute("size").toUpperCase()};
                     }
-                    Signal s = new Signal(signal, this);//TODO: CHECK IF THIS WORKS (VECTOR LENGTH)
+                    Signal s = new Signal(signal, this);
                     signals.add(s);
                 }
             }
@@ -1151,7 +1151,7 @@ public class Graph implements I_GRAPH
                         StringBuilder mooreOutputBuilder = new StringBuilder();
                         for (int j = 0; j < assignList.getLength(); j++) {
                             Element assignEl = (Element) assignList.item(j);
-                            mooreOutputBuilder.append(assignEl.getAttribute("expr"));
+                            mooreOutputBuilder.append(normalizeOutputExpr(assignEl.getAttribute("expr")));
                             if (j < assignList.getLength() - 1) {
                                 mooreOutputBuilder.append(", ");
                             }
@@ -1185,7 +1185,7 @@ public class Graph implements I_GRAPH
                                 StringBuilder mealyOutputBuilder = new StringBuilder();
                                 for (int k = 0; k < assignList.getLength(); k++) {
                                     Element assignEl = (Element) assignList.item(k);
-                                    mealyOutputBuilder.append(assignEl.getAttribute("expr"));
+                                    mealyOutputBuilder.append(normalizeOutputExpr(assignEl.getAttribute("expr")));
                                     if (k < assignList.getLength() - 1) {
                                         mealyOutputBuilder.append(", ");
                                     }
@@ -1215,7 +1215,7 @@ public class Graph implements I_GRAPH
                             StringBuilder mealyOutputBuilder = new StringBuilder();
                             for (int k = 0; k < assignList.getLength(); k++) {
                                 Element assignEl = (Element) assignList.item(k);
-                                mealyOutputBuilder.append(assignEl.getAttribute("expr"));
+                                mealyOutputBuilder.append(normalizeOutputExpr(assignEl.getAttribute("expr")));
                                 if (k < assignList.getLength() - 1) {
                                     mealyOutputBuilder.append(", ");
                                 }
@@ -1233,6 +1233,18 @@ public class Graph implements I_GRAPH
 
     }
         
+    /**
+     * Normalizes an output expr value from XML for the Lexer.
+     * The Lexer only accepts binary (0/1 digits), hex (0x...), or #N (decimal).
+     * Plain decimal integers starting with 2-9 are prefixed with '#'.
+     */
+    private static String normalizeOutputExpr(String expr) {
+        if (!expr.isEmpty() && expr.charAt(0) >= '2' && expr.charAt(0) <= '9') {
+            return "#" + expr;
+        }
+        return expr;
+    }
+
     /**
      * Gets the "legend" of the output-vector.
      * An output-vector is a comma-separated String, that hold the output
