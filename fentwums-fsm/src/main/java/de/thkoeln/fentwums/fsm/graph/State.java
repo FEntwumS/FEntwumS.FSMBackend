@@ -821,6 +821,21 @@ public class State extends Component
     }
 
     /**
+     * Sets variable assignments text and enables the assignment block.
+     */
+    public void setVariableAssignments(String text) {
+        variableAssignments.setText(text);
+        variableAssignmentsEnabled = text != null && !text.isBlank();
+        if (variableAssignmentsEnabled) {
+            if (parent.getGraphType() == Graph.GRAPH_TYPE.MOORE) {
+                name.setVerticalFactor(-1.0 / 3.0);
+            } else {
+                name.setVerticalFactor(-1.0 / 4.0);
+            }
+        }
+    }
+
+    /**
      * get whether variable-assignments are enabled
      * 
      * @return variable-assignments enabled?

@@ -34,6 +34,7 @@ import org.xml.sax.SAXException;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * The graph is the core of this project: It stores all Components, signals and
@@ -1099,7 +1100,11 @@ public class Graph implements I_GRAPH
                 Element varsContainer = (Element) variablesParents.item(0);
 
                 // 2. Search ONLY inside that container
+                // Accept both legacy <variable> and current <var> tags.
                 NodeList variablesList = varsContainer.getElementsByTagName("variable");
+                if (variablesList.getLength() == 0) {
+                    variablesList = varsContainer.getElementsByTagName("var");
+                }
 
                 for (int i = 0; i < variablesList.getLength(); i++) {
                     String[] variable;
@@ -1159,6 +1164,31 @@ public class Graph implements I_GRAPH
                         s.setMooreOutputString(mooreOutputBuilder.toString());
                     }
                 }
+
+                NodeList onEntryList = el.getElementsByTagName("onentry");
+                if (onEntryList.getLength() > 0) {
+                    StringBuilder variableAssignmentsBuilder = new StringBuilder();
+                    for (int j = 0; j < onEntryList.getLength(); j++) {
+                        Element onEntryEl = (Element) onEntryList.item(j);
+                        NodeList assignList = onEntryEl.getElementsByTagName("assign");
+                        for (int k = 0; k < assignList.getLength(); k++) {
+                            Element assignEl = (Element) assignList.item(k);
+                            String variableName = assignEl.getAttribute("variable");
+                            String expression = normalizeVariableAssignmentExpr(assignEl.getAttribute("expr"));
+                            if (!variableName.isBlank() && !expression.isBlank()) {
+                                if (variableAssignmentsBuilder.length() > 0) {
+                                    variableAssignmentsBuilder.append("; ");
+                                }
+                                variableAssignmentsBuilder.append(variableName)
+                                        .append("=")
+                                        .append(expression);
+                            }
+                        }
+                    }
+                    if (!variableAssignmentsBuilder.isEmpty()) {
+                        s.setVariableAssignments(variableAssignmentsBuilder.toString());
+                    }
+                }
                 
                 components.add(s);
             }
@@ -1173,7 +1203,7 @@ public class Graph implements I_GRAPH
                     Element transEl = (Element) transitionList.item(j);
                     String targetStateId = transEl.getAttribute("target");
                     State toState = getStateByName(targetStateId);
-                    String condition = transEl.getAttribute("cond").replace("and","&&").replace("or","||").replace("not","!");
+                    String condition = normalizeConditionExpr(transEl.getAttribute("cond"));
 
                     if (fromState != null && toState != null) {
                         Transition t = new Transition(this, fromState, toState);
@@ -1243,6 +1273,38 @@ public class Graph implements I_GRAPH
             return "#" + expr;
         }
         return expr;
+    }
+
+    /**
+     * Normalizes numeric literals in variable assignment expressions for the Lexer.
+     */
+    private static String normalizeVariableAssignmentExpr(String expr) {
+        return Pattern.compile("\\b([2-9][0-9]*)\\b")
+                .matcher(expr)
+                .replaceAll("#$1");
+    }
+
+    /**
+     * Normalizes condition expressions from SCXML to Lexer-compatible operators.
+     */
+    private static String normalizeConditionExpr(String expr) {
+        String normalized = expr;
+        normalized = replaceKeyword(normalized, "not_equal", "!=");
+        normalized = replaceKeyword(normalized, "greater_equal", ">=");
+        normalized = replaceKeyword(normalized, "less_equal", "<=");
+        normalized = replaceKeyword(normalized, "greater_than", ">");
+        normalized = replaceKeyword(normalized, "less_than", "<");
+        normalized = replaceKeyword(normalized, "equal", "==");
+        normalized = replaceKeyword(normalized, "and", "&&");
+        normalized = replaceKeyword(normalized, "or", "||");
+        normalized = replaceKeyword(normalized, "not", "!");
+        return normalized;
+    }
+
+    private static String replaceKeyword(String source, String keyword, String replacement) {
+        return Pattern.compile("\\b" + Pattern.quote(keyword) + "\\b", Pattern.CASE_INSENSITIVE)
+                .matcher(source)
+                .replaceAll(replacement);
     }
 
     /**
