@@ -167,13 +167,13 @@ public abstract class SigVar
                 type = SIGVAR_TYPE.BIT_N;
                 bitLength = 8;
                 break;
-            case "SIGNED":
+            case "INTEGER":
                 type = SIGVAR_TYPE.SIGNED;
-                bitLength = 16;
+                bitLength = Integer.parseInt(signal[3]);
                 break;
             case "UNSIGNED":
                 type = SIGVAR_TYPE.UNSIGNED;
-                bitLength = 16;
+                bitLength = Integer.parseInt(signal[3]);
                 break;
             case "VECTOR":
                 type = SIGVAR_TYPE.VECTOR;
@@ -202,10 +202,14 @@ public abstract class SigVar
                 break;
             case "INTEGER":
                 type = SIGVAR_TYPE.SIGNED;
-                bitLength = 16;
+                bitLength = Integer.parseInt(signal[2]);
+                break;
+            case "UNSIGNED":
+                type = SIGVAR_TYPE.UNSIGNED;
+                bitLength = Integer.parseInt(signal[2]);
                 break;
             case "VECTOR":
-                type = SIGVAR_TYPE.VECTOR;
+                type = SIGVAR_TYPE.BIT_N;
                 bitLength = Integer.parseInt(signal[2]);
                 break;
             default:
