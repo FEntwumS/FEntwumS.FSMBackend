@@ -667,7 +667,6 @@ public class Generation implements I_GENERATION {
                 case BIT:
                     type = "bit";
                     break;
-                case VECTOR:
                 case BIT_N:
                     type = "vector";
                     break;
@@ -675,7 +674,7 @@ public class Generation implements I_GENERATION {
                     type = "integer";
                     break;
                 case UNSIGNED:
-                    type = "vector";
+                    type = "unsigned";
                     break;
             }
 
@@ -721,7 +720,6 @@ public class Generation implements I_GENERATION {
                 case BIT:
                     type = "bit";
                     break;
-                case VECTOR:
                 case BIT_N:
                     type = "vector";
                     break;
@@ -729,7 +727,7 @@ public class Generation implements I_GENERATION {
                     type = "integer";
                     break;
                 case UNSIGNED:
-                    type = "vector";
+                    type = "unsigned";
                     break;
             }
             // type := nibble | byte  if applicable (bitLenght in {4,8})
@@ -1035,7 +1033,6 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         type = "bool";
                         break;
-                    case VECTOR:
                     case BIT_N:
                     case UNSIGNED:
                         if (bitLen == 1) {
@@ -1128,7 +1125,6 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         type = "bool";
                         break;
-                    case VECTOR:
                     case BIT_N:
                     case UNSIGNED:
                         if (bitLen == 1) {
@@ -1506,7 +1502,6 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         type = "std_logic";
                         break;
-                    case VECTOR:
                     case BIT_N:
                         type = "std_logic_vector(" + (long) (bitLen - 1) + " downto 0)";
                         break;
@@ -1611,7 +1606,6 @@ public class Generation implements I_GENERATION {
                         case BIT:
                             type = "std_logic";
                             break;
-                        case VECTOR:
                         case BIT_N:
                             type = "std_logic_vector(" + (long) (bitLen - 1) + " downto 0)";
                             break;
@@ -1868,7 +1862,6 @@ public class Generation implements I_GENERATION {
                             case BIT:
                                 value = "'" + gov.value + "'";
                                 break;
-                            case VECTOR:
                             case BIT_N:
                                 // convert to binary
                                 value = "\"" + String.format("%" + outSignal.getBitLength() + "s",
@@ -1948,7 +1941,6 @@ public class Generation implements I_GENERATION {
                             case BIT:
                                 value = "'" + gov.value + "'";
                                 break;
-                            case VECTOR:
                             case BIT_N:
                                 // convert to binary
                                 value = "\"" + String.format("%" + outSignal.getBitLength() + "s",
@@ -2070,7 +2062,6 @@ public class Generation implements I_GENERATION {
                     case BIT:
                         value = "'" + gov.value + "'";
                         break;
-                    case VECTOR:
                     case BIT_N:
                         // convert to binary
                         value = "\"" + String.format("%" + outSignal.getBitLength() + "s",

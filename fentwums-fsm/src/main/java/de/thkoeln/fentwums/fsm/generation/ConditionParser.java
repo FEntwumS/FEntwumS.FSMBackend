@@ -340,7 +340,6 @@ public class ConditionParser
                     case BIT:
                         generatedCondition.VHDL += "'"+lex.getNumber()+"'";
                         break;
-                    case VECTOR:
                     case BIT_N:
                         generatedCondition.VHDL += "\"" + String.format("%"+typeIn.getBitLength()+"s", 
                                 Integer.toBinaryString(lex.getNumber())).replace(" ", "0")  + "\"";

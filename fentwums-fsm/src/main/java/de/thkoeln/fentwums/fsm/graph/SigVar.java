@@ -31,7 +31,7 @@ import java.io.IOException;
 public abstract class SigVar
 {
     // *** ENUMARATIONS ***
-    public enum SIGVAR_TYPE {BIT, BIT_N, SIGNED, UNSIGNED,VECTOR}; // type
+    public enum SIGVAR_TYPE {BIT, BIT_N, SIGNED, UNSIGNED}; // type
     
     // *** ATTRIBUTES ***
     protected String name;
@@ -176,7 +176,7 @@ public abstract class SigVar
                 bitLength = Integer.parseInt(signal[3]);
                 break;
             case "VECTOR":
-                type = SIGVAR_TYPE.VECTOR;
+                type = SIGVAR_TYPE.BIT_N;
                 bitLength = Integer.parseInt(signal[3]);
                 break;
             default:
