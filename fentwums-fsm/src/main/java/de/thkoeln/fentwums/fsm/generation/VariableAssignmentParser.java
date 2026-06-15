@@ -426,6 +426,49 @@ public class VariableAssignmentParser
                             lex.getNextToken();
                             return;
                         }
+                        // Erweiterung: <VARIABLE> = shl(<VARIABLE>) | shr(<VARIABLE>)
+                        else if(lex.getToken() == TOKEN.SHIFT_LEFT || lex.getToken() == TOKEN.SHIFT_RIGHT)
+                        {
+                            TOKEN shiftToken = lex.getToken();
+                            lex.getNextToken();
+                            if(lex.getToken() == TOKEN.LPARENTH)
+                            {
+                                lex.getNextToken();
+                                if(lex.getToken() == TOKEN.IDENTIFIER && (varRhs=getVariable(lex.getIdentifier())) != null)
+                                {
+                                    if(varLhs.getType() == varRhs.getType() && varLhs.getBitLength() == varRhs.getBitLength())
+                                    {
+                                        lex.getNextToken();
+                                        if(lex.getToken() == TOKEN.RPARENTH)
+                                        {
+                                            if (shiftToken == TOKEN.SHIFT_LEFT) {
+                                                genVarAssign.rhsNeutral = "shl(" + varRhs.getName() + ")";
+                                                genVarAssign.rhsC = varRhs.getName() + " << 1";
+                                                if(varRhs.getType() == SigVar.SIGVAR_TYPE.UNSIGNED || varRhs.getType() == SigVar.SIGVAR_TYPE.SIGNED)
+                                                    genVarAssign.rhsVHDL = "to_integer(to_" + varRhs.getType().toString().toLowerCase() + "(" + varRhs.getName().toUpperCase() + "," + varRhs.getBitLength() + ") sll 1)";
+                                                else if(varRhs.getType() == SigVar.SIGVAR_TYPE.BIT_N)
+                                                    genVarAssign.rhsVHDL = varRhs.getName().toUpperCase() + "(" + (varRhs.getBitLength()-2) + " downto 0) & '0'";
+                                                else
+                                                    errorStr = "Shift beim Typ 'BIT' nicht möglich";
+                                            } else {
+                                                genVarAssign.rhsNeutral = "shr(" + varRhs.getName() + ")";
+                                                genVarAssign.rhsC = varRhs.getName() + " >> 1";
+                                                if(varRhs.getType() == SigVar.SIGVAR_TYPE.UNSIGNED)
+                                                    genVarAssign.rhsVHDL = "to_integer(to_unsigned(" + varRhs.getName().toUpperCase() + "," + varRhs.getBitLength() + ") srl 1)";
+                                                else if(varRhs.getType() == SigVar.SIGVAR_TYPE.SIGNED)
+                                                    genVarAssign.rhsVHDL = "to_integer(to_signed(" + varRhs.getName().toUpperCase() + "," + varRhs.getBitLength() + ") sra 1)";
+                                                else if(varRhs.getType() == SigVar.SIGVAR_TYPE.BIT_N)
+                                                    genVarAssign.rhsVHDL = "'0' & " + varRhs.getName().toUpperCase() + "(" + (varRhs.getBitLength()-1) + " downto 1)";
+                                                else
+                                                    errorStr = "Shift beim Typ 'BIT' nicht möglich";
+                                            }
+                                            lex.getNextToken();
+                                            return;
+                                        } else errorStr = "')' fehlt nach Variable in shift";
+                                    } else errorStr = "Variablenausdruck nur mit Variablen gleichen Typs und Bitlänge moeglich";
+                                } else errorStr = "Variable nach '(' erwartet";
+                            } else errorStr = "'(' nach shl/shr erwartet";
+                        }
                         else
                         {
                             errorStr = "Rechter Teil der Gleichung (nach '=') ist ungültig";
