@@ -1156,7 +1156,7 @@ public class Graph implements I_GRAPH
                         StringBuilder mooreOutputBuilder = new StringBuilder();
                         for (int j = 0; j < assignList.getLength(); j++) {
                             Element assignEl = (Element) assignList.item(j);
-                            mooreOutputBuilder.append(normalizeOutputExpr(assignEl.getAttribute("expr")));
+                            mooreOutputBuilder.append(assignEl.getAttribute("expr"));
                             if (j < assignList.getLength() - 1) {
                                 mooreOutputBuilder.append(", ");
                             }
@@ -1174,7 +1174,7 @@ public class Graph implements I_GRAPH
                         for (int k = 0; k < assignList.getLength(); k++) {
                             Element assignEl = (Element) assignList.item(k);
                             String variableName = assignEl.getAttribute("variable");
-                            String expression = normalizeVariableAssignmentExpr(assignEl.getAttribute("expr"));
+                            String expression = assignEl.getAttribute("expr");
                             if (!variableName.isBlank() && !expression.isBlank()) {
                                 if (variableAssignmentsBuilder.length() > 0) {
                                     variableAssignmentsBuilder.append("; ");
@@ -1215,7 +1215,7 @@ public class Graph implements I_GRAPH
                                 StringBuilder mealyOutputBuilder = new StringBuilder();
                                 for (int k = 0; k < assignList.getLength(); k++) {
                                     Element assignEl = (Element) assignList.item(k);
-                                    mealyOutputBuilder.append(normalizeOutputExpr(assignEl.getAttribute("expr")));
+                                    mealyOutputBuilder.append(assignEl.getAttribute("expr"));
                                     if (k < assignList.getLength() - 1) {
                                         mealyOutputBuilder.append(", ");
                                     }
@@ -1245,7 +1245,7 @@ public class Graph implements I_GRAPH
                             StringBuilder mealyOutputBuilder = new StringBuilder();
                             for (int k = 0; k < assignList.getLength(); k++) {
                                 Element assignEl = (Element) assignList.item(k);
-                                mealyOutputBuilder.append(normalizeOutputExpr(assignEl.getAttribute("expr")));
+                                mealyOutputBuilder.append(assignEl.getAttribute("expr"));
                                 if (k < assignList.getLength() - 1) {
                                     mealyOutputBuilder.append(", ");
                                 }
@@ -1261,27 +1261,6 @@ public class Graph implements I_GRAPH
                 throw new RuntimeException(e);
             }
 
-    }
-        
-    /**
-     * Normalizes an output expr value from XML for the Lexer.
-     * The Lexer only accepts binary (0/1 digits), hex (0x...), or #N (decimal).
-     * Plain decimal integers starting with 2-9 are prefixed with '#'.
-     */
-    private static String normalizeOutputExpr(String expr) {
-        if (!expr.isEmpty() && expr.charAt(0) >= '2' && expr.charAt(0) <= '9') {
-            return "#" + expr;
-        }
-        return expr;
-    }
-
-    /**
-     * Normalizes numeric literals in variable assignment expressions for the Lexer.
-     */
-    private static String normalizeVariableAssignmentExpr(String expr) {
-        return Pattern.compile("\\b([2-9][0-9]*)\\b")
-                .matcher(expr)
-                .replaceAll("#$1");
     }
 
     /**
