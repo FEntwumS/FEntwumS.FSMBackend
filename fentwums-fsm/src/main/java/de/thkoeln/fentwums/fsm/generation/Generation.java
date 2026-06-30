@@ -1105,7 +1105,7 @@ public class Generation implements I_GENERATION {
         }
         pwc.println("    } state;");
 
-        pwc.println("    static initialized = false;   // enforce resetting!");
+        pwc.println("    static bool initialized = false;   // enforce resetting!");
 
         // (II.) write variables
         // here no initialisation is made!
