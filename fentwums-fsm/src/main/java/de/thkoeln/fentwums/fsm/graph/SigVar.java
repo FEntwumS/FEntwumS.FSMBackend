@@ -151,6 +151,7 @@ public abstract class SigVar
         bitLength = in.readInt();
         parent = graph;
     }
+    // For Signals with 'dir' attribute
     public void loadSigVarFromFile(String[] signal, Graph graph) throws IOException
     {
         name = signal[0];
@@ -184,10 +185,11 @@ public abstract class SigVar
         }
         parent = graph;
     }
-    public void loadVarFromFile(String[] signal, Graph graph) throws IOException //TODO: CHECK IF IT WORKS
+    // For Variables without 'dir' attribute
+    public void loadVarFromFile(String[] variable, Graph graph) throws IOException
     {
-        name = signal[0];
-        switch (signal[1].toUpperCase()) {
+        name = variable[0];
+        switch (variable[1].toUpperCase()) {
             case "BIT":
                 type = SIGVAR_TYPE.BIT;
                 bitLength = 1;
@@ -202,18 +204,18 @@ public abstract class SigVar
                 break;
             case "INTEGER":
                 type = SIGVAR_TYPE.SIGNED;
-                bitLength = Integer.parseInt(signal[2]);
+                bitLength = Integer.parseInt(variable[2]);
                 break;
             case "UNSIGNED":
                 type = SIGVAR_TYPE.UNSIGNED;
-                bitLength = Integer.parseInt(signal[2]);
+                bitLength = Integer.parseInt(variable[2]);
                 break;
             case "VECTOR":
                 type = SIGVAR_TYPE.BIT_N;
-                bitLength = Integer.parseInt(signal[2]);
+                bitLength = Integer.parseInt(variable[2]);
                 break;
             default:
-                type = SIGVAR_TYPE.valueOf(signal[1]);
+                type = SIGVAR_TYPE.valueOf(variable[1]);
         }
         parent = graph;
     }
